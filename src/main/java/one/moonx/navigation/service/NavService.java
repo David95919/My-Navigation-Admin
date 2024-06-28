@@ -1,8 +1,7 @@
 package one.moonx.navigation.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import one.moonx.navigation.entity.User;
+import one.moonx.navigation.entity.Nav;
 
-public interface IUserService extends IService<User> {
-
+public interface NavService extends IService<Nav> {
 }
