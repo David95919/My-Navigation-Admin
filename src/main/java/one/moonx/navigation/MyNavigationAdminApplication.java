@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+//SpringBoot
 @SpringBootApplication
 @MapperScan("one.moonx.navigation.mapper")
 public class MyNavigationAdminApplication {
