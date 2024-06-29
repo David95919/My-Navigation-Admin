@@ -1,9 +1,14 @@
 package one.moonx.navigation.controller.admin;
 
+import one.moonx.navigation.base.Result;
+import one.moonx.navigation.constant.UserConstant;
+import one.moonx.navigation.convert.UserConvert;
+import one.moonx.navigation.pojo.dto.UserDTO;
+import one.moonx.navigation.pojo.dto.UserLoginDTO;
+import one.moonx.navigation.pojo.vo.UserLoginVO;
 import one.moonx.navigation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/user")
@@ -11,5 +16,66 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserConvert userConvert;
 
+
+    /**
+     * 按 ID 获取用
+     *
+     * @param id id
+     * @return {@link Result }<{@link UserDTO }>
+     */
+    @GetMapping("/{id}")
+    public Result<UserDTO> getUserById(@PathVariable Integer id) {
+        return Result.success.msgAndData(UserConstant.USER_GET_SUCCESS, userConvert.convert(userService.getById(id)));
+    }
+
+    /**
+     * 创建用户
+     *
+     * @param userDTO 用户 DTO
+     * @return {@link Result }
+     */
+    @PostMapping
+    public Result createUser(@RequestBody UserDTO userDTO) {
+        userService.createUser(userConvert.convert(userDTO));
+        return Result.success.msg(UserConstant.USER_CREATE_SUCCESS);
+    }
+
+    /**
+     * 更新用户
+     *
+     * @param userDTO 用户 DTO
+     * @return {@link Result }
+     */
+    @PutMapping
+    public Result updateUser(@RequestBody UserDTO userDTO) {
+        userService.updateUser(userConvert.convert(userDTO));
+        return Result.success.msg(UserConstant.USER_UPDATE_SUCCESS);
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param id id
+     * @return {@link Result }
+     */
+    @DeleteMapping("/{id}")
+    public Result deleteUser(@PathVariable Integer id) {
+        userService.removeById(id);
+        return Result.success.msg(UserConstant.USER_DELETE_SUCCESS);
+    }
+
+    /**
+     * 登录
+     *
+     * @param userLoginDTO 用户登录 DTO
+     * @return {@link Result }<{@link UserLoginDTO }>
+     */
+    @GetMapping("/login")
+    public Result<UserLoginVO> login(UserLoginDTO userLoginDTO) {
+        UserLoginVO userLoginVO = userService.login(userLoginDTO);
+        return Result.success.msgAndData(UserConstant.USER_LOGIN_SUCCESS, userLoginVO);
+    }
 }

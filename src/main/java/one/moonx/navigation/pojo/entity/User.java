@@ -1,4 +1,4 @@
-package one.moonx.navigation.entity;
+package one.moonx.navigation.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -8,20 +8,19 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-@TableName("t_nav")
 @Data
-public class Nav implements Serializable {
+@TableName("t_user")
+public class User implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String name;
+    private String username;
 
-    private String url;
-
-    private String description;
+    private String password;
 
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")

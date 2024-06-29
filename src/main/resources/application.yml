@@ -40,3 +40,10 @@ mybatis-plus:
 
 server:
   port: 8080
+
+one:
+  moonx:
+    jwt:
+      adminSecretKey: yourSecretKey
+      adminTtl: 360000
+      adminTokenName: token
