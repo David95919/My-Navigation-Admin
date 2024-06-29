@@ -6,9 +6,12 @@ import one.moonx.navigation.convert.UserConvert;
 import one.moonx.navigation.pojo.dto.UserDTO;
 import one.moonx.navigation.pojo.dto.UserLoginDTO;
 import one.moonx.navigation.pojo.vo.UserLoginVO;
+import one.moonx.navigation.pojo.vo.UserVO;
 import one.moonx.navigation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/user")
@@ -19,6 +22,15 @@ public class UserController {
     @Autowired
     private UserConvert userConvert;
 
+    /**
+     * 获取用户
+     *
+     * @return {@link Result }<{@link List }<{@link UserVO }>>
+     */
+    @GetMapping
+    public Result<List<UserVO>> getUser() {
+        return Result.success.msgAndData(UserConstant.USER_GET_SUCCESS, userConvert.convertVO(userService.lambdaQuery().list()));
+    }
 
     /**
      * 按 ID 获取用
@@ -27,7 +39,7 @@ public class UserController {
      * @return {@link Result }<{@link UserDTO }>
      */
     @GetMapping("/{id}")
-    public Result<UserDTO> getUserById(@PathVariable Integer id) {
+    public Result<UserVO> getUserById(@PathVariable Integer id) {
         return Result.success.msgAndData(UserConstant.USER_GET_SUCCESS, userConvert.convert(userService.getById(id)));
     }
 
