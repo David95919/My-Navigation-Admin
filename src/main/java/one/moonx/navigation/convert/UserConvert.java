@@ -9,11 +9,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserConvert {
-    UserDTO convertDTO(User user);
-
     User convert(UserDTO userDTO);
 
-    List<UserVO> convertVO(List<User> users);
+    UserDTO convertDTO(User user);
 
     UserVO convert(User user);
+
+    List<UserVO> convertVO(List<User> users);
 }

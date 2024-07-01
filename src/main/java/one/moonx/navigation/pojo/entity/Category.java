@@ -1,19 +1,16 @@
 package one.moonx.navigation.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.extension.handlers.GsonTypeHandler;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
-@TableName(value = "t_nav", autoResultMap = true)
+@TableName("t_nav")
 @Data
-public class Nav implements Serializable {
+public class Category implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -21,15 +18,6 @@ public class Nav implements Serializable {
     private Integer id;
 
     private String name;
-
-    private String url;
-
-    private String description;
-
-    @TableField(value = "tags", typeHandler = GsonTypeHandler.class)
-    private List<Integer> tags;
-
-    private Integer category;
 
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")

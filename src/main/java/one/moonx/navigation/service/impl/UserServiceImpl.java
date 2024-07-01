@@ -25,6 +25,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private JwtProperties jwtProperties;
 
+    /**
+     * 检查用户名和密码
+     *
+     * @param username 用户名
+     * @param password 密码
+     */
     private void checkUserNameAndPassword(String username, String password) {
         //判断用户名是否合法
         if (username != null) {
@@ -41,6 +47,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
     }
 
+    /**
+     * 创建用户
+     *
+     * @param user 用户
+     */
     @Override
     public void createUser(User user) {
         //清空提交来的id
@@ -61,6 +72,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
     }
 
+    /**
+     * 更新用户
+     *
+     * @param user 用户
+     */
     @Override
     public void updateUser(User user) {
         //检查用户名和密码
@@ -87,6 +103,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         updateById(user);
     }
 
+    /**
+     * 登录
+     *
+     * @param userLoginDTO 用户登录 DTO
+     * @return {@link UserLoginVO }
+     */
     @Override
     public UserLoginVO login(UserLoginDTO userLoginDTO) {
         //获取数据库用户
