@@ -9,6 +9,7 @@ import one.moonx.navigation.pojo.dto.CategoryDTO;
 import one.moonx.navigation.pojo.entity.Category;
 import one.moonx.navigation.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -31,6 +32,12 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         }
     }
 
+    /**
+     * 检查
+     *
+     * @param name 名字
+     * @param id   id
+     */
     private void check(String name, Integer id) {
         check(name);
         if (id == null) {
@@ -65,7 +72,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         //清空id
         categoryDTO.setId(null);
         //保存
-        save(categoryConvert.convert(categoryDTO));
+        Category category = categoryConvert.convert(categoryDTO);
+
+        try {
+            //保存
+            save(category);
+        } catch (UncategorizedSQLException e) {
+            //名字重复
+            throw new BaseException(MessageConstant.NAME_REPEAT);
+        }
     }
 
     @Override

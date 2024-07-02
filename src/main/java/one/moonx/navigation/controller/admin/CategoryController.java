@@ -50,7 +50,7 @@ public class CategoryController {
      * @return {@link Result }
      */
     @PostMapping
-    public Result createCategory(@RequestBody CategoryDTO categoryDTO) {
+    public Result<String> createCategory(@RequestBody CategoryDTO categoryDTO) {
         categoryService.createCategory(categoryDTO);
         return Result.success.msg(MessageConstant.ADD_SUCCESS);
     }
@@ -62,13 +62,19 @@ public class CategoryController {
      * @return {@link Result }
      */
     @PutMapping
-    public Result updateCategory(@RequestBody CategoryDTO categoryDTO) {
+    public Result<String> updateCategory(@RequestBody CategoryDTO categoryDTO) {
         categoryService.updateCategory(categoryDTO);
         return Result.success.msg(MessageConstant.UPDATE_SUCCESS);
     }
 
+    /**
+     * 删除类别
+     *
+     * @param id id
+     * @return {@link Result }
+     */
     @DeleteMapping("/{id}")
-    public Result deleteCategory(@PathVariable String id) {
+    public Result<String> deleteCategory(@PathVariable String id) {
         categoryService.removeById(id);
         return Result.success.msg(MessageConstant.DELETE_SUCCESS);
     }

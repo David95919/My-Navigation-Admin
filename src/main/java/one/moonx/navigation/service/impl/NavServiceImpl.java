@@ -71,6 +71,7 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
      */
     @Override
     public void createNav(NavDTO navDTO) {
+        //检查
         check(navDTO.getName(), navDTO.getUrl(), navDTO.getCategory());
 
         Nav nav = navConvert.convert(navDTO);
@@ -79,18 +80,26 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
             save(nav);
         } catch (UncategorizedSQLException e) {
             //名字重复
-            throw new BaseException(NavConstant.NAME_REPEAT);
+            throw new BaseException(MessageConstant.NAME_REPEAT);
         }
     }
 
+    /**
+     * 更新导航
+     *
+     * @param navDTO 导航 DTO
+     */
     @Override
     public void updateNav(NavDTO navDTO) {
+        //检查
         check(navDTO.getName(), navDTO.getUrl());
+
+        //判断数据库有没有
         Nav dbNav = getById(navDTO.getId());
         if (dbNav == null) {
             throw new BaseException(NavConstant.UPDATE_UNLAWFUL);
         }
-        System.out.println(navDTO);
+        //更新
         updateById(navConvert.convert(navDTO));
     }
 

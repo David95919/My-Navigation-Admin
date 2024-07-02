@@ -49,7 +49,7 @@ public class NavController {
      * @return {@link Result }
      */
     @PostMapping
-    public Result createNav(@RequestBody NavDTO navDTO) {
+    public Result<String> createNav(@RequestBody NavDTO navDTO) {
         navService.createNav(navDTO);
         return Result.success.msg(MessageConstant.ADD_SUCCESS);
     }
@@ -61,7 +61,7 @@ public class NavController {
      * @return {@link Result }
      */
     @PutMapping
-    public Result updateNav(@RequestBody NavDTO navDTO) {
+    public Result<String> updateNav(@RequestBody NavDTO navDTO) {
         navService.updateNav(navDTO);
         return Result.success.msg(MessageConstant.UPDATE_SUCCESS);
     }
@@ -73,7 +73,7 @@ public class NavController {
      * @return {@link Result }
      */
     @DeleteMapping("/{id}")
-    public Result deleteNav(@PathVariable Integer id) {
+    public Result<String> deleteNav(@PathVariable Integer id) {
         navService.removeById(id);
         return Result.success.msg(MessageConstant.DELETE_SUCCESS);
     }

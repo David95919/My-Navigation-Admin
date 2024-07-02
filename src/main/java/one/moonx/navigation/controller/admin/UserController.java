@@ -50,7 +50,7 @@ public class UserController {
      * @return {@link Result }
      */
     @PostMapping
-    public Result createUser(@RequestBody UserDTO userDTO) {
+    public Result<String> createUser(@RequestBody UserDTO userDTO) {
         userService.createUser(userConvert.convert(userDTO));
         return Result.success.msg(UserConstant.USER_CREATE_SUCCESS);
     }
@@ -62,7 +62,7 @@ public class UserController {
      * @return {@link Result }
      */
     @PutMapping
-    public Result updateUser(@RequestBody UserDTO userDTO) {
+    public Result<String> updateUser(@RequestBody UserDTO userDTO) {
         userService.updateUser(userConvert.convert(userDTO));
         return Result.success.msg(UserConstant.USER_UPDATE_SUCCESS);
     }
@@ -74,7 +74,7 @@ public class UserController {
      * @return {@link Result }
      */
     @DeleteMapping("/{id}")
-    public Result deleteUser(@PathVariable Integer id) {
+    public Result<String> deleteUser(@PathVariable Integer id) {
         userService.removeById(id);
         return Result.success.msg(UserConstant.USER_DELETE_SUCCESS);
     }
