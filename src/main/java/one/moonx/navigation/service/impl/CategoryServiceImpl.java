@@ -8,6 +8,7 @@ import one.moonx.navigation.mapper.CategoryMapper;
 import one.moonx.navigation.pojo.dto.CategoryDTO;
 import one.moonx.navigation.pojo.entity.Category;
 import one.moonx.navigation.service.CategoryService;
+import one.moonx.navigation.service.NavService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import java.io.Serializable;
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
     @Autowired
     private CategoryConvert categoryConvert;
+    @Autowired
+    private NavService navService;
 
     /**
      * 检查
@@ -107,7 +110,14 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      */
     @Override
     public boolean removeById(Serializable id) {
+        //判断网站是否绑定了这个分类
+        boolean isBindCategory = navService.isBindCategory(Integer.parseInt(id.toString()));
+        if (isBindCategory) {
+            throw new BaseException(MessageConstant.ALREADY_BIND_NAV);
+        }
+
         boolean result = super.removeById(id);
+
         if (!result) {
             throw new BaseException(MessageConstant.ID_ERROR);
         }

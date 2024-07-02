@@ -9,4 +9,5 @@ public class MessageConstant {
     public static final String NAME_UNLAWFUL = "名字不合法";
     public static final String ID_ERROR = "ID错误";
     public static final String NAME_REPEAT = "名字重复";
+    public static final String ALREADY_BIND_NAV = "已经绑定了网站";
 }

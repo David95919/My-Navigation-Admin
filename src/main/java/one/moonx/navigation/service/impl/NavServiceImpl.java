@@ -117,4 +117,33 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
         }
         return true;
     }
+
+    /**
+     * 是否绑定类别
+     *
+     * @param id 分类id
+     * @return boolean
+     */
+    @Override
+    public boolean isBindCategory(Integer id) {
+        Long count = lambdaQuery().eq(Nav::getCategory, id).count();
+        return count >= 1;
+    }
+
+    /**
+     * 是绑定标签
+     *
+     * @param id 标签id
+     * @return boolean
+     */
+    @Override
+    public boolean isBindTag(Integer id) {
+        //TODO 添加一个tag多对一的表
+
+        //sql安全的:)
+        Long count = lambdaQuery()
+                .apply("JSON_CONTAINS(tags, CONCAT('[', {0}, ']'))", id)
+                .count();
+        return false;
+    }
 }

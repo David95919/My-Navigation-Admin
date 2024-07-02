@@ -3,7 +3,6 @@ package one.moonx.navigation.pojo.vo;
 
 import lombok.Data;
 
-import java.util.Date;
 import java.util.List;
 
 @Data

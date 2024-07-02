@@ -7,6 +7,7 @@ import one.moonx.navigation.exception.BaseException;
 import one.moonx.navigation.mapper.TagMapper;
 import one.moonx.navigation.pojo.dto.TagDTO;
 import one.moonx.navigation.pojo.entity.Tag;
+import one.moonx.navigation.service.NavService;
 import one.moonx.navigation.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.UncategorizedSQLException;
@@ -18,6 +19,8 @@ import java.io.Serializable;
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
     @Autowired
     private TagConvert tagConvert;
+    @Autowired
+    private NavService navService;
 
     /**
      * 检查
@@ -61,21 +64,6 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     }
 
     /**
-     * 按 ID 删除
-     *
-     * @param id id
-     * @return boolean
-     */
-    @Override
-    public boolean removeById(Serializable id) {
-        boolean result = super.removeById(id);
-        if (!result) {
-            throw new BaseException(MessageConstant.ID_ERROR);
-        }
-        return true;
-    }
-
-    /**
      * 创建标签
      *
      * @param tagDTO 标签 DTO
@@ -115,5 +103,26 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
         Tag tag = tagConvert.convert(tagDTO);
         updateById(tag);
+    }
+
+    /**
+     * 按 ID 删除
+     *
+     * @param id id
+     * @return boolean
+     */
+    @Override
+    public boolean removeById(Serializable id) {
+        //判断网站是否绑定了这个Tag
+        boolean isBindTag = navService.isBindTag(Integer.parseInt(id.toString()));
+        if (isBindTag) {
+            throw new BaseException(MessageConstant.ALREADY_BIND_NAV);
+        }
+
+        boolean result = super.removeById(id);
+        if (!result) {
+            throw new BaseException(MessageConstant.ID_ERROR);
+        }
+        return true;
     }
 }
