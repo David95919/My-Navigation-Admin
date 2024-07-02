@@ -144,6 +144,6 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
         Long count = lambdaQuery()
                 .apply("JSON_CONTAINS(tags, CONCAT('[', {0}, ']'))", id)
                 .count();
-        return false;
+        return count >= 1;
     }
 }

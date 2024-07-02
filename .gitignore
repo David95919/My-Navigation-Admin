@@ -31,6 +31,5 @@ build/
 ### VS Code ###
 .vscode/
 
-datasource.db
 rebel.xml
 /src/main/resources/application-dev.yml

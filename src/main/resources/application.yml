@@ -1,11 +1,13 @@
 spring:
+  profiles:
+    active: prod
   application:
     name: My-Navigation-Admin
   datasource:
-    username: admin
-    password: 123456
-    url: jdbc:sqlite:datasource.db
-    driver-class-name: org.sqlite.JDBC
+    username: ${one.moonx.datasource.username}
+    password: ${one.moonx.datasource.password}
+    url: jdbc:mysql://${one.moonx.datasource.host}:${one.moonx.datasource.port}/${one.moonx.datasource.database}?
+    driver-class-name: ${one.moonx.datasource.driver-class-name}
   sql:
     init:
       continue-on-error: true
@@ -39,11 +41,10 @@ mybatis-plus:
     use-column-label: true
 
 server:
-  port: 8080
-
+  port: ${one.moonx.server.port}
 one:
   moonx:
     jwt:
-      adminSecretKey: yourSecretKey
-      adminTtl: 360000
-      adminTokenName: token
+      adminSecretKey: ${one.moonx.jwt.adminSecretKey}
+      adminTtl: ${one.moonx.jwt.adminTtl}
+      adminTokenName: ${one.moonx.jwt.adminTokenName}
