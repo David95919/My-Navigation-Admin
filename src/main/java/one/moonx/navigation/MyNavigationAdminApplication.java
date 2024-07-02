@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //SpringBoot
 @SpringBootApplication
 @MapperScan("one.moonx.navigation.mapper")
-
 public class MyNavigationAdminApplication {
 
     public static void main(String[] args) {

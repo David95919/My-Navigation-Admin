@@ -19,8 +19,4 @@ public class NavVO {
     private List<Integer> tags;
 
     private Integer category;
-
-    private Date createTime;
-
-    private Date updateTime;
 }

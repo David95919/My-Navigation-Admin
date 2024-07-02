@@ -11,14 +11,14 @@ public interface UserService extends IService<User> {
      *
      * @param user 用户
      */
-    public void createUser(User user);
+    void createUser(User user);
 
     /**
      * 更新用户
      *
      * @param user 用户
      */
-    public void updateUser(User user);
+    void updateUser(User user);
 
 
     /**
@@ -27,5 +27,5 @@ public interface UserService extends IService<User> {
      * @param userLoginDTO 用户登录 DTO
      * @return {@link UserLoginVO }
      */
-    public UserLoginVO login(UserLoginDTO userLoginDTO);
+    UserLoginVO login(UserLoginDTO userLoginDTO);
 }

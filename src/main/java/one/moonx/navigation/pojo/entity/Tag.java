@@ -8,9 +8,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-@TableName("t_category")
+@TableName("t_tag")
 @Data
-public class Category implements Serializable {
+public class Tag implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 

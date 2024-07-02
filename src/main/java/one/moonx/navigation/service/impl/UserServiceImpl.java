@@ -2,6 +2,7 @@ package one.moonx.navigation.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import one.moonx.navigation.constant.JwtClaimsConstant;
+import one.moonx.navigation.constant.MessageConstant;
 import one.moonx.navigation.constant.UserConstant;
 import one.moonx.navigation.exception.BaseException;
 import one.moonx.navigation.mapper.UserMapper;
@@ -16,6 +17,7 @@ import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +47,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 throw new BaseException(UserConstant.USER_PASSWORD_UNLAWFUL);
             }
         }
+    }
+
+    @Override
+    public User getById(Serializable id) {
+        User user = super.getById(id);
+        if (user == null) {
+            throw new BaseException(MessageConstant.ID_ERROR);
+        }
+        return user;
     }
 
     /**
@@ -136,5 +147,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .id(dbUser.getId())
                 .username(dbUser.getUsername())
                 .token(token).build();
+    }
+
+    /**
+     * 按 ID 删除
+     *
+     * @param id id
+     * @return boolean
+     */
+    @Override
+    public boolean removeById(Serializable id) {
+        boolean result = super.removeById(id);
+        if (!result) {
+            throw new BaseException(MessageConstant.ID_ERROR);
+        }
+        return true;
     }
 }
