@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class MybatisPlusConfig {
+public class MybatisPlusConfiguration {
     /**
      * 新的分页插件,一缓和二缓遵循mybatis的规则,
      */

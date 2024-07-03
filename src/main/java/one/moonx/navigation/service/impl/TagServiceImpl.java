@@ -11,6 +11,9 @@ import one.moonx.navigation.pojo.vo.TagVO;
 import one.moonx.navigation.service.NavService;
 import one.moonx.navigation.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,8 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     private TagConvert tagConvert;
     @Autowired
     private NavService navService;
+
+    private static final String cacheNames = "TagCache";
 
     /**
      * 检查
@@ -58,11 +63,13 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @return {@link Tag }
      */
     @Override
+    @Cacheable(cacheNames = cacheNames, key = "#id")
     public Tag getById(Serializable id) {
         Tag tag = super.getById(id);
         if (tag == null) {
             throw new BaseException(MessageConstant.ID_ERROR);
         }
+        System.out.println("Cache Miss for ID: " + id);
         return tag;
     }
 
@@ -94,6 +101,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @param tagDTO 标记 DTO
      */
     @Override
+    @CacheEvict(cacheNames = cacheNames, key = "#tagDTO.id")
     public void updateTag(TagDTO tagDTO) {
         ///检查
         check(tagDTO.getName(), tagDTO.getId());
@@ -115,6 +123,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @return boolean
      */
     @Override
+    @CacheEvict(cacheNames = cacheNames, key = "id")
     public boolean removeById(Serializable id) {
         //判断网站是否绑定了这个Tag
         boolean isBindTag = navService.isBindTag(Integer.parseInt(id.toString()));

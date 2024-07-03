@@ -37,7 +37,7 @@ public class TagController {
      * @return {@link Result }<{@link TagVO }>
      */
     @GetMapping("/{id}")
-    public Result<TagVO> getTagById(@PathVariable int id) {
+    public Result<TagVO> getTagById(@PathVariable Integer id) {
         TagVO tagVO = tagConvert.convertVO(tagService.getById(id));
         return Result.success.msgAndData(MessageConstant.GET_SUCCESS, tagVO);
     }

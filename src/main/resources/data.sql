@@ -1,36 +1,36 @@
-create table if not exists t_user
+CREATE TABLE IF NOT EXISTS t_user
 (
-    id          integer primary key not null auto_increment,
-    username    varchar(24) UNIQUE  not null,
-    password    char(32)            not null,
-    create_time datetime            not null,
-    update_time datetime
-);
+    id          INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    username    VARCHAR(24) UNIQUE             NOT NULL,
+    password    CHAR(32)                       NOT NULL,
+    create_time DATETIME                       NOT NULL,
+    update_time DATETIME
+)charset utf8 collate utf8_general_ci;
 
-create table if not exists t_nav
+CREATE TABLE IF NOT EXISTS t_nav
 (
-    id          integer primary key not null auto_increment,
-    name        varchar(24) UNIQUE  not null,
-    url         varchar(50)         not null,
-    description text,
+    id          INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name        VARCHAR(24) UNIQUE             NOT NULL,
+    url         VARCHAR(50)                    NOT NULL,
+    description TEXT,
     tags        VARCHAR(255),
-    category    integer,
-    create_time datetime            not null,
-    update_time datetime
-);
+    category    INT,
+    create_time DATETIME                       NOT NULL,
+    update_time DATETIME
+)charset utf8 collate utf8_general_ci;
 
-create table if not exists t_category
+CREATE TABLE IF NOT EXISTS t_category
 (
-    id          integer primary key not null auto_increment,
-    name        varchar(24) UNIQUE  not null,
-    create_time datetime            not null,
-    update_time datetime
-);
+    id          INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name        VARCHAR(24) UNIQUE             NOT NULL,
+    create_time DATETIME                       NOT NULL,
+    update_time DATETIME
+)charset utf8 collate utf8_general_ci;
 
-create table if not exists t_tag
+CREATE TABLE IF NOT EXISTS t_tag
 (
-    id          integer primary key not null auto_increment,
-    name        varchar(24) UNIQUE  not null,
-    create_time datetime            not null,
-    update_time datetime
-)
+    id          INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name        VARCHAR(24) UNIQUE             NOT NULL,
+    create_time DATETIME                       NOT NULL,
+    update_time DATETIME
+)charset utf8 collate utf8_general_ci;

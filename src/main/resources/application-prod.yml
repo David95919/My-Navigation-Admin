@@ -4,31 +4,31 @@ one:
     datasource:
       # 数据库host
       host: localhost
-
       # 数据库端口
       port: 3306
-
       # 哪个数据库
       database: navigation
-
       # 数据库用户名
       username: root
-
       # 数据库密码
       password: 123456
-
       # 不要修改
       driver-class-name: com.mysql.cj.jdbc.Driver
+    # redis
+    redis:
+      host: localhost
+      port: 6379
+      password: password
+      database: 0
 
     server:
       # 后端端口
       port: 8080
-
 
     # jwt相关
     jwt:
       # jwt密码一定要修改
       adminSecretKey: yourSecretKey
       # jwt过期时间
-      adminTtl: 360000
+      adminTtl: 36000000
       adminTokenName: token

@@ -11,6 +11,9 @@ import one.moonx.navigation.pojo.vo.CategoryVO;
 import one.moonx.navigation.service.CategoryService;
 import one.moonx.navigation.service.NavService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     private CategoryConvert categoryConvert;
     @Autowired
     private NavService navService;
+
+    private static final String cacheNames = "CategoryCache";
 
     /**
      * 检查
@@ -56,6 +61,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return {@link Category }
      */
     @Override
+    @Cacheable(cacheNames = cacheNames, key = "#id")
     public Category getById(Serializable id) {
         Category category = CategoryService.super.getById(id);
         if (category == null) {
@@ -88,6 +94,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
+    @CacheEvict(cacheNames = cacheNames, key = "#categoryDTO.id")
     public void updateCategory(CategoryDTO categoryDTO) {
         //简单检查
         check(categoryDTO.getName(), categoryDTO.getId());
@@ -110,6 +117,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return boolean
      */
     @Override
+    @CacheEvict(cacheNames = cacheNames, key = "id")
     public boolean removeById(Serializable id) {
         //判断网站是否绑定了这个分类
         boolean isBindCategory = navService.isBindCategory(Integer.parseInt(id.toString()));
