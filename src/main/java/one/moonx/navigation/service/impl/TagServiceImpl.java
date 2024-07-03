@@ -7,6 +7,7 @@ import one.moonx.navigation.exception.BaseException;
 import one.moonx.navigation.mapper.TagMapper;
 import one.moonx.navigation.pojo.dto.TagDTO;
 import one.moonx.navigation.pojo.entity.Tag;
+import one.moonx.navigation.pojo.vo.TagVO;
 import one.moonx.navigation.service.NavService;
 import one.moonx.navigation.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
@@ -124,5 +127,23 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
             throw new BaseException(MessageConstant.ID_ERROR);
         }
         return true;
+    }
+
+    /**
+     * 获取VoList
+     *
+     * @param idList id列表
+     * @return {@link List }<{@link TagVO }>
+     */
+    @Override
+    public List<TagVO> getVOList(List<Integer> idList) {
+        ArrayList<TagVO> arrays = new ArrayList(idList.size());
+
+        idList.forEach(tagId -> {
+            TagVO tagVO = tagConvert.convertVO(getById(tagId));
+            arrays.add(tagVO);
+        });
+
+        return arrays;
     }
 }

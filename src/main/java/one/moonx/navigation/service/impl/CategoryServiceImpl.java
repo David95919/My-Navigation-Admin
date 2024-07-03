@@ -7,6 +7,7 @@ import one.moonx.navigation.exception.BaseException;
 import one.moonx.navigation.mapper.CategoryMapper;
 import one.moonx.navigation.pojo.dto.CategoryDTO;
 import one.moonx.navigation.pojo.entity.Category;
+import one.moonx.navigation.pojo.vo.CategoryVO;
 import one.moonx.navigation.service.CategoryService;
 import one.moonx.navigation.service.NavService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,5 +123,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
             throw new BaseException(MessageConstant.ID_ERROR);
         }
         return true;
+    }
+
+    /**
+     * 获取Vo按id
+     *
+     * @param id id
+     * @return {@link CategoryVO }
+     */
+    @Override
+    public CategoryVO getVOById(Integer id) {
+        return categoryConvert.convertVO(getById(id));
     }
 }

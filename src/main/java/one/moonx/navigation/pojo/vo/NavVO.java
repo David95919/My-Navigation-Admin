@@ -15,7 +15,7 @@ public class NavVO {
 
     private String description;
 
-    private List<Integer> tags;
+    private List<TagVO> tags;
 
-    private Integer category;
+    private CategoryVO category;
 }

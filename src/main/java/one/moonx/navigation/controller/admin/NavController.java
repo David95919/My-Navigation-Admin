@@ -16,8 +16,6 @@ import java.util.List;
 public class NavController {
     @Autowired
     private NavService navService;
-    @Autowired
-    private NavConvert navConvert;
 
     /**
      * 获取导航
@@ -26,7 +24,7 @@ public class NavController {
      */
     @GetMapping
     public Result<List<NavVO>> getNav() {
-        List<NavVO> navVOList = navConvert.convertVO(navService.list());
+        List<NavVO> navVOList = navService.getVOList();
         return Result.success.msgAndData(MessageConstant.GET_SUCCESS, navVOList);
     }
 
@@ -38,7 +36,7 @@ public class NavController {
      */
     @GetMapping("/{id}")
     public Result<NavVO> getNavById(@PathVariable Integer id) {
-        NavVO navVO = navConvert.convertVO(navService.getById(id));
+        NavVO navVO = navService.getVOById(id);
         return Result.success.msgAndData(MessageConstant.GET_SUCCESS, navVO);
     }
 
