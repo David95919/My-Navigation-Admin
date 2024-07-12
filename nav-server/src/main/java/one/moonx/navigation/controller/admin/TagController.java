@@ -73,7 +73,7 @@ public class TagController {
      * @return {@link Result }<{@link String }>
      */
     @DeleteMapping("/{id}")
-    public Result<String> deleteTag(@PathVariable int id) {
+    public Result<String> deleteTag(@PathVariable Integer id) {
         tagService.removeById(id);
         return Result.success.msg(MessageConstant.DELETE_SUCCESS);
     }
