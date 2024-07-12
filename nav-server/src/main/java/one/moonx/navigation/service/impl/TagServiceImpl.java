@@ -121,7 +121,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @return boolean
      */
     @Override
-    @CacheEvict(cacheNames = cacheNames, key = "id")
+    @CacheEvict(cacheNames = cacheNames, key = "#id")
     public boolean removeById(Serializable id) {
         //判断网站是否绑定了这个Tag
         boolean isBindTag = navService.isBindTag(Integer.parseInt(id.toString()));

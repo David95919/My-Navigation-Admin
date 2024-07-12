@@ -73,7 +73,7 @@ public class CategoryController {
      * @return {@link Result }
      */
     @DeleteMapping("/{id}")
-    public Result<String> deleteCategory(@PathVariable String id) {
+    public Result<String> deleteCategory(@PathVariable Integer id) {
         categoryService.removeById(id);
         return Result.success.msg(MessageConstant.DELETE_SUCCESS);
     }

@@ -116,7 +116,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return boolean
      */
     @Override
-    @CacheEvict(cacheNames = cacheNames, key = "id")
+    @CacheEvict(cacheNames = cacheNames, key = "#id")
     public boolean removeById(Serializable id) {
         //判断网站是否绑定了这个分类
         boolean isBindCategory = navService.isBindCategory(Integer.parseInt(id.toString()));
