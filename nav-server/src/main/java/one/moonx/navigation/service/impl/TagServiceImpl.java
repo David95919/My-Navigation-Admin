@@ -14,11 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,5 +152,18 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         });
 
         return arrays;
+    }
+
+    /**
+     * 删除多个标签
+     *
+     * @param ids ids
+     */
+    @Override
+    public void deleteMultipleTags(List<Integer> ids) {
+        //TODO removeBatchByIds(ids);
+        for (Integer id : ids) {
+            removeById(id);
+        }
     }
 }
