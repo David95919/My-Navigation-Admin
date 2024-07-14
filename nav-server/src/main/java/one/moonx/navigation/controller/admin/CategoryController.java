@@ -4,6 +4,7 @@ import one.moonx.navigation.base.Result;
 import one.moonx.navigation.constant.MessageConstant;
 import one.moonx.navigation.convert.CategoryConvert;
 import one.moonx.navigation.pojo.dto.CategoryDTO;
+import one.moonx.navigation.pojo.dto.IdsDTO;
 import one.moonx.navigation.pojo.vo.CategoryVO;
 import one.moonx.navigation.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,18 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public Result<String> deleteCategory(@PathVariable Integer id) {
         categoryService.removeById(id);
+        return Result.success.msg(MessageConstant.DELETE_SUCCESS);
+    }
+
+    /**
+     * 删除多个标签
+     *
+     * @param ids ids
+     * @return {@link Result }<{@link String }>
+     */
+    @DeleteMapping("/multiple")
+    public Result<String> deleteMultipleTags(@RequestBody IdsDTO ids) {
+        categoryService.deleteMultipleTags(ids.getIds());
         return Result.success.msg(MessageConstant.DELETE_SUCCESS);
     }
 }

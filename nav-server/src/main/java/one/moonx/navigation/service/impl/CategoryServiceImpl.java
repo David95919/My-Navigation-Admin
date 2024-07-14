@@ -17,6 +17,7 @@ import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
@@ -141,5 +142,18 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override
     public CategoryVO getVOById(Integer id) {
         return categoryConvert.convertVO(getById(id));
+    }
+
+    /**
+     * 删除多个标签
+     *
+     * @param ids ids
+     */
+    @Override
+    public void deleteMultipleTags(List<Integer> ids) {
+        //TODO removeBatchByIds(ids);
+        for (Integer id : ids) {
+            removeById(id);
+        }
     }
 }
