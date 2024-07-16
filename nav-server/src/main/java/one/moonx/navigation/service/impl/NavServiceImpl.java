@@ -7,6 +7,7 @@ import one.moonx.navigation.convert.NavConvert;
 import one.moonx.navigation.exception.BaseException;
 import one.moonx.navigation.mapper.NavMapper;
 import one.moonx.navigation.pojo.dto.NavDTO;
+import one.moonx.navigation.pojo.dto.NavQuery;
 import one.moonx.navigation.pojo.entity.Nav;
 import one.moonx.navigation.pojo.vo.NavVO;
 import one.moonx.navigation.service.CategoryService;
@@ -190,11 +191,17 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
     /**
      * 获取 VoList
      *
+     * @param query 查询
      * @return {@link List }<{@link NavVO }>
      */
     @Override
-    public List<NavVO> getVOList() {
-        List<Nav> navList = list();
+    public List<NavVO> getVOList(NavQuery query) {
+        List<Nav> navList = lambdaQuery()
+                .like(query.getName() != null, Nav::getName, query.getName())
+                .eq(query.getCategory() != null, Nav::getCategory, query.getCategory())
+                .apply(query.getTag() != null, "JSON_CONTAINS(tags, CONCAT('[', {0}, ']'))", query.getTag())
+                .list();
+
         List<NavVO> navVOList = navConvert.convertVO(navList);
 
         for (int i = 0; i < navList.size(); i++) {

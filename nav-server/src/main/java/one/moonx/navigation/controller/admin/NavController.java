@@ -3,6 +3,7 @@ package one.moonx.navigation.controller.admin;
 import one.moonx.navigation.base.Result;
 import one.moonx.navigation.constant.MessageConstant;
 import one.moonx.navigation.pojo.dto.NavDTO;
+import one.moonx.navigation.pojo.dto.NavQuery;
 import one.moonx.navigation.pojo.vo.NavVO;
 import one.moonx.navigation.service.NavService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ public class NavController {
      * @return {@link Result }<{@link List }<{@link NavVO }>>
      */
     @GetMapping
-    public Result<List<NavVO>> getNav() {
-        List<NavVO> navVOList = navService.getVOList();
+    public Result<List<NavVO>> getNav(NavQuery query) {
+        List<NavVO> navVOList = navService.getVOList(query);
         return Result.success.msgAndData(MessageConstant.GET_SUCCESS, navVOList);
     }
 
