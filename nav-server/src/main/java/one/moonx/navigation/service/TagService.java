@@ -15,4 +15,6 @@ public interface TagService extends IService<Tag> {
     List<TagVO> getVOList(List<Integer> idList);
 
     void deleteMultipleTags(List<Integer> ids);
+
+    boolean isTag(List<Integer> ids);
 }

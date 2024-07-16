@@ -115,6 +115,14 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
         //检查
         check(navDTO.getName(), navDTO.getUrl(), navDTO.getCategory());
 
+        if (!tagService.isTag(navDTO.getTags())) {
+            throw new BaseException(MessageConstant.TAG_ID_ERROR);
+        }
+
+        if (categoryService.getById(navDTO.getCategory()) == null) {
+            throw new BaseException(MessageConstant.CATEGORY_ID_ERROR);
+        }
+
         Nav nav = navConvert.convert(navDTO);
         try {
             //保存

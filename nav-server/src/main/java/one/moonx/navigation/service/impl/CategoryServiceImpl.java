@@ -65,7 +65,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     public Category getById(Serializable id) {
         Category category = CategoryService.super.getById(id);
         if (category == null) {
-            throw new BaseException(MessageConstant.ID_ERROR);
+            throw new BaseException(MessageConstant.CATEGORY_ID_ERROR);
         }
         return category;
     }

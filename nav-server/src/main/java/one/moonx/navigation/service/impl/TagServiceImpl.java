@@ -166,4 +166,17 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
             removeById(id);
         }
     }
+
+    /**
+     * isTag
+     *
+     * @param ids ids
+     * @return boolean
+     */
+    @Override
+    public boolean isTag(List<Integer> ids) {
+        List<Tag> tags = baseMapper.selectBatchIds(ids);
+        System.out.println(tags);
+        return tags.size() == ids.size();
+    }
 }
