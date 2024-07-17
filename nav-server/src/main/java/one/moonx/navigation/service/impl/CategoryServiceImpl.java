@@ -35,7 +35,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      */
     private void check(String name) {
         if (name != null) {
-            if (name.isEmpty() || !(name.length() <= 24 && name.length() >= 3)) {
+            if (name.isEmpty() || !(name.length() <= 24 && name.length() >= 2)) {
                 throw new BaseException(MessageConstant.NAME_UNLAWFUL);
             }
         }

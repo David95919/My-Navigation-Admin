@@ -36,7 +36,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      */
     private void check(String name) {
         if (name != null) {
-            if (name.isEmpty() || !(name.length() <= 24 && name.length() >= 3)) {
+            if (name.isEmpty() || !(name.length() <= 24 && name.length() >= 2)) {
                 throw new BaseException(MessageConstant.NAME_UNLAWFUL);
             }
         }
@@ -146,6 +146,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     public List<TagVO> getVOList(List<Integer> idList) {
         ArrayList<TagVO> arrays = new ArrayList(idList.size());
 
+        //为了触发缓存
         idList.forEach(tagId -> {
             TagVO tagVO = tagConvert.convertVO(getById(tagId));
             arrays.add(tagVO);
