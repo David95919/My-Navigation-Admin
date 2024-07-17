@@ -8,7 +8,7 @@ spring:
   datasource:
     username: ${one.moonx.datasource.username}
     password: ${one.moonx.datasource.password}
-    url: jdbc:mysql://${one.moonx.datasource.host}:${one.moonx.datasource.port}/${one.moonx.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    url: jdbc:mysql://${one.moonx.datasource.host}:${one.moonx.datasource.port}/${one.moonx.datasource.database}?createDatabaseIfNotExist=true&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
     driver-class-name: ${one.moonx.datasource.driver-class-name}
     hikari:
       max-lifetime: 300000
