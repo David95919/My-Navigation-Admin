@@ -1,6 +1,7 @@
 package one.moonx.navigation.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import one.moonx.navigation.base.ResultPage;
 import one.moonx.navigation.pojo.dto.NavDTO;
 import one.moonx.navigation.pojo.dto.NavQuery;
 import one.moonx.navigation.pojo.entity.Nav;
@@ -18,7 +19,8 @@ public interface NavService extends IService<Nav> {
 
     boolean isBindTag(Integer id);
 
-    List<NavVO> getVOList(NavQuery query);
 
     NavVO getVOById(Integer id);
+
+    ResultPage<List<NavVO>> getVOList(NavQuery query);
 }

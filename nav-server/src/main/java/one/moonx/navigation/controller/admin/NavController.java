@@ -1,6 +1,7 @@
 package one.moonx.navigation.controller.admin;
 
 import one.moonx.navigation.base.Result;
+import one.moonx.navigation.base.ResultPage;
 import one.moonx.navigation.constant.MessageConstant;
 import one.moonx.navigation.pojo.dto.NavDTO;
 import one.moonx.navigation.pojo.dto.NavQuery;
@@ -23,9 +24,9 @@ public class NavController {
      * @return {@link Result }<{@link List }<{@link NavVO }>>
      */
     @GetMapping
-    public Result<List<NavVO>> getNav(NavQuery query) {
-        List<NavVO> navVOList = navService.getVOList(query);
-        return Result.success.msgAndData(MessageConstant.GET_SUCCESS, navVOList);
+    public ResultPage<List<NavVO>> getNav(NavQuery query) {
+        ResultPage<List<NavVO>> result = navService.getVOList(query);
+        return result;
     }
 
     /**

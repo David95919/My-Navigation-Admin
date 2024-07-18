@@ -1,6 +1,8 @@
 package one.moonx.navigation.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import one.moonx.navigation.base.ResultPage;
 import one.moonx.navigation.constant.MessageConstant;
 import one.moonx.navigation.constant.NavConstant;
 import one.moonx.navigation.convert.NavConvert;
@@ -204,31 +206,35 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
         return count >= 1;
     }
 
+
     /**
      * 获取 VoList
      *
      * @param query 查询
-     * @return {@link List }<{@link NavVO }>
+     * @return {@link ResultPage }<{@link List }<{@link NavVO }>>
      */
     @Override
-    public List<NavVO> getVOList(NavQuery query) {
-        List<Nav> navList = lambdaQuery()
+    public ResultPage<List<NavVO>> getVOList(NavQuery query) {
+        Page<Nav> page = lambdaQuery()
                 .like(query.getName() != null, Nav::getName, query.getName())
                 .eq(query.getCategory() != null, Nav::getCategory, query.getCategory())
                 .apply(query.getTag() != null, "JSON_CONTAINS(tags, CONCAT('[', {0}, ']'))", query.getTag())
-                .list();
+                .page(Page.of(query.getCurrent(), query.getSize()));
 
-        List<NavVO> navVOList = navConvert.convertVO(navList);
+        List<Nav> records = page.getRecords();
 
-        for (int i = 0; i < navList.size(); i++) {
+        List<NavVO> navVOList = navConvert.convertVO(records);
+
+        for (int i = 0; i < records.size(); i++) {
             //处理分类
-            Integer categoryId = navList.get(i).getCategory();
+            Integer categoryId = records.get(i).getCategory();
             navVOList.get(i).setCategory(categoryService.getVOById(categoryId));
 
             //处理tags
-            List<Integer> tags = navList.get(i).getTags();
+            List<Integer> tags = records.get(i).getTags();
             navVOList.get(i).setTags(tagService.getVOList(tags));
         }
-        return navVOList;
+
+        return ResultPage.success.msgAndRecords(MessageConstant.GET_SUCCESS, navVOList, page.getTotal());
     }
 }
