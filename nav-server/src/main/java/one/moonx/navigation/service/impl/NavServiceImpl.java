@@ -215,10 +215,11 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
      */
     @Override
     public ResultPage<List<NavVO>> getVOList(NavQuery query) {
+        // TODO AddTag
+
         Page<Nav> page = lambdaQuery()
                 .like(query.getName() != null, Nav::getName, query.getName())
                 .eq(query.getCategory() != null, Nav::getCategory, query.getCategory())
-                .apply(query.getTag() != null, "JSON_CONTAINS(tags, CONCAT('[', {0}, ']'))", query.getTag())
                 .page(Page.of(query.getCurrent(), query.getSize()));
 
         List<Nav> records = page.getRecords();
