@@ -14,10 +14,12 @@ import one.moonx.navigation.pojo.entity.Nav;
 import one.moonx.navigation.pojo.vo.NavVO;
 import one.moonx.navigation.service.CategoryService;
 import one.moonx.navigation.service.NavService;
+import one.moonx.navigation.service.NavTagService;
 import one.moonx.navigation.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,6 +32,8 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
     private CategoryService categoryService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private NavTagService navTagService;
 
     /**
      * 检查
@@ -74,7 +78,10 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
      */
     @Override
     public Nav getById(Serializable id) {
+        //获取nav
         Nav nav = super.getById(id);
+
+        //如果是空返回id错误
         if (nav == null) {
             throw new BaseException(MessageConstant.ID_ERROR);
         }
@@ -98,11 +105,11 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
 
         NavVO navVO = navConvert.convertVO(nav);
 
-        //处理分类
+        //获取categoryVO
         navVO.setCategory(categoryService.getVOById(nav.getCategory()));
 
-        //处理tag 这么写是为了命中缓存
-        navVO.setTags(tagService.getVOList(nav.getTags()));
+        //获取tagVO
+        navVO.setTags(tagService.getVOList(nav.getId()));
 
         return navVO;
     }
@@ -113,19 +120,23 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
      * @param navDTO 导航 DTO
      */
     @Override
+    @Transactional
     public void createNav(NavDTO navDTO) {
         //检查
         check(navDTO.getName(), navDTO.getUrl(), navDTO.getCategory());
 
+        //检查标签存不存在
         if (!tagService.isTag(navDTO.getTags())) {
             throw new BaseException(MessageConstant.TAG_ID_ERROR);
         }
 
+        //检查分类存不存在
         if (categoryService.getById(navDTO.getCategory()) == null) {
             throw new BaseException(MessageConstant.CATEGORY_ID_ERROR);
         }
 
         Nav nav = navConvert.convert(navDTO);
+
         try {
             //保存
             save(nav);
@@ -133,6 +144,9 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
             //名字重复
             throw new BaseException(MessageConstant.NAME_REPEAT);
         }
+
+        //保存标签
+        navTagService.createNavTag(nav.getId(), navDTO.getTags());
     }
 
     /**
@@ -141,14 +155,17 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
      * @param navDTO 导航 DTO
      */
     @Override
+    @Transactional
     public void updateNav(NavDTO navDTO) {
         //检查
         check(navDTO.getName(), navDTO.getUrl());
 
+        //检查标签存不存在
         if (!tagService.isTag(navDTO.getTags())) {
             throw new BaseException(MessageConstant.TAG_ID_ERROR);
         }
 
+        //检查分类存不存在
         if (categoryService.getById(navDTO.getCategory()) == null) {
             throw new BaseException(MessageConstant.CATEGORY_ID_ERROR);
         }
@@ -158,8 +175,11 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
         if (dbNav == null) {
             throw new BaseException(NavConstant.UPDATE_UNLAWFUL);
         }
-        //更新
+
+        //更新nav
         updateById(navConvert.convert(navDTO));
+        //更新tag
+        navTagService.updateNavTag(navDTO.getId(), navDTO.getTags());
     }
 
     /**
@@ -171,9 +191,12 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
     @Override
     public boolean removeById(Serializable id) {
         boolean result = super.removeById(id);
+        //判断有没有删除成功
         if (!result) {
             throw new BaseException(MessageConstant.ID_ERROR);
         }
+        //删除navTag
+        navTagService.deleteNavTag(Integer.parseInt(id.toString()));
         return true;
     }
 
@@ -197,13 +220,7 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
      */
     @Override
     public boolean isBindTag(Integer id) {
-        //TODO 添加一个tag多对一的表
-
-        //sql安全的:)
-        Long count = lambdaQuery()
-                .apply("JSON_CONTAINS(tags, CONCAT('[', {0}, ']'))", id)
-                .count();
-        return count >= 1;
+        return navTagService.NavIsBindTag(id);
     }
 
 
@@ -215,8 +232,7 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
      */
     @Override
     public ResultPage<List<NavVO>> getVOList(NavQuery query) {
-        // TODO AddTag
-
+        // TODO AddTag Query
         Page<Nav> page = lambdaQuery()
                 .like(query.getName() != null, Nav::getName, query.getName())
                 .eq(query.getCategory() != null, Nav::getCategory, query.getCategory())
@@ -227,13 +243,13 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
         List<NavVO> navVOList = navConvert.convertVO(records);
 
         for (int i = 0; i < records.size(); i++) {
-            //处理分类
-            Integer categoryId = records.get(i).getCategory();
+            Nav nav = records.get(i);
+            //获取分类
+            Integer categoryId = nav.getCategory();
             navVOList.get(i).setCategory(categoryService.getVOById(categoryId));
 
-            //处理tags
-            List<Integer> tags = records.get(i).getTags();
-            navVOList.get(i).setTags(tagService.getVOList(tags));
+            //获取tags
+            navVOList.get(i).setTags(tagService.getVOList(nav.getId()));
         }
 
         return ResultPage.success.msgAndRecords(MessageConstant.GET_SUCCESS, navVOList, page.getTotal());

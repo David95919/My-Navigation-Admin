@@ -26,9 +26,6 @@ public class Nav implements Serializable {
 
     private String description;
 
-    @TableField(value = "tags", typeHandler = JacksonTypeHandler.class)
-    private List<Integer> tags;
-
     private Integer category;
 
     @TableField(value = "create_time", fill = FieldFill.INSERT)

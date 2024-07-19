@@ -1,4 +1,6 @@
 spring:
+  cache:
+    type: redis
   main:
     allow-circular-references: true
   profiles:

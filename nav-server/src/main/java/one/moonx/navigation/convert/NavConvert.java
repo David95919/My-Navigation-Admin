@@ -16,23 +16,16 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface NavConvert {
     @Mappings({
-            @Mapping(target = "tags", qualifiedByName = "getTags"),
             @Mapping(target = "category", qualifiedByName = "getCategory")
     })
     List<NavVO> convertVO(List<Nav> navs);
 
     @Mappings({
-            @Mapping(target = "tags", qualifiedByName = "getTags"),
             @Mapping(target = "category", qualifiedByName = "getCategory")
     })
     NavVO convertVO(Nav navs);
 
     Nav convert(NavDTO navDTO);
-
-    @Named("getTags")
-    default List<TagVO> getTags(List<Integer> list) {
-        return new ArrayList<TagVO>();
-    }
 
     @Named("getCategory")
     default CategoryVO getCategory(Integer integer) {

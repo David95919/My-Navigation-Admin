@@ -12,7 +12,7 @@ public interface TagService extends IService<Tag> {
 
     void updateTag(TagDTO tagDTO);
 
-    List<TagVO> getVOList(List<Integer> idList);
+    List<TagVO> getVOList(Integer navId);
 
     void deleteMultipleTags(List<Integer> ids);
 

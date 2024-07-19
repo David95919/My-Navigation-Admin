@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS t_user
     password    CHAR(32)                       NOT NULL,
     create_time DATETIME                       NOT NULL,
     update_time DATETIME
-)charset utf8 collate utf8_general_ci;
+) charset utf8
+  collate utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS t_nav
 (
@@ -13,11 +14,11 @@ CREATE TABLE IF NOT EXISTS t_nav
     name        VARCHAR(24) UNIQUE             NOT NULL,
     url         VARCHAR(50)                    NOT NULL,
     description TEXT,
-    tags        VARCHAR(255),
     category    INT,
     create_time DATETIME                       NOT NULL,
     update_time DATETIME
-)charset utf8 collate utf8_general_ci;
+) charset utf8
+  collate utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS t_category
 (
@@ -25,7 +26,8 @@ CREATE TABLE IF NOT EXISTS t_category
     name        VARCHAR(24) UNIQUE             NOT NULL,
     create_time DATETIME                       NOT NULL,
     update_time DATETIME
-)charset utf8 collate utf8_general_ci;
+) charset utf8
+  collate utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS t_tag
 (
@@ -33,4 +35,13 @@ CREATE TABLE IF NOT EXISTS t_tag
     name        VARCHAR(24) UNIQUE             NOT NULL,
     create_time DATETIME                       NOT NULL,
     update_time DATETIME
-)charset utf8 collate utf8_general_ci;
+) charset utf8
+  collate utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS t_nav_tag
+(
+    id     INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nav_id INT                            NOT NULL,
+    tag_id INT                            NOT NULL
+) charset utf8
+  collate utf8_general_ci;

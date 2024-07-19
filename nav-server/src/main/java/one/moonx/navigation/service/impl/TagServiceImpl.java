@@ -6,9 +6,11 @@ import one.moonx.navigation.convert.TagConvert;
 import one.moonx.navigation.exception.BaseException;
 import one.moonx.navigation.mapper.TagMapper;
 import one.moonx.navigation.pojo.dto.TagDTO;
+import one.moonx.navigation.pojo.entity.NavTag;
 import one.moonx.navigation.pojo.entity.Tag;
 import one.moonx.navigation.pojo.vo.TagVO;
 import one.moonx.navigation.service.NavService;
+import one.moonx.navigation.service.NavTagService;
 import one.moonx.navigation.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -26,6 +28,8 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     private TagConvert tagConvert;
     @Autowired
     private NavService navService;
+    @Autowired
+    private NavTagService navTagService;
 
     private static final String cacheNames = "TagCache";
 
@@ -136,19 +140,21 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         return true;
     }
 
+
     /**
      * 获取VoList
      *
-     * @param idList id列表
+     * @param navId 导航 ID
      * @return {@link List }<{@link TagVO }>
      */
     @Override
-    public List<TagVO> getVOList(List<Integer> idList) {
-        ArrayList<TagVO> arrays = new ArrayList(idList.size());
+    public List<TagVO> getVOList(Integer navId) {
+        List<NavTag> list = navTagService.lambdaQuery().eq(NavTag::getNavId, navId).list();
+        ArrayList<TagVO> arrays = new ArrayList(list.size());
 
         //为了触发缓存
-        idList.forEach(tagId -> {
-            TagVO tagVO = tagConvert.convertVO(getById(tagId));
+        list.forEach(item -> {
+            TagVO tagVO = tagConvert.convertVO(this.getById(item.getTagId()));
             arrays.add(tagVO);
         });
 
