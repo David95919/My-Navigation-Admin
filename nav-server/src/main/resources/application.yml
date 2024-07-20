@@ -16,10 +16,9 @@ spring:
       max-lifetime: 300000
   sql:
     init:
-      continue-on-error: true
       mode: always
-      data-locations: classpath:data.sql
-      schema-locations: classpath:schema.sql
+      data-locations: classpath:db/data.sql
+      schema-locations: classpath:db/schema.sql
   data:
     redis:
       host: ${one.moonx.redis.host}
