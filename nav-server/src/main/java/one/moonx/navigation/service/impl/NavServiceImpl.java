@@ -126,7 +126,7 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
         check(navDTO.getName(), navDTO.getUrl(), navDTO.getCategory());
 
         //检查标签存不存在
-        if (!tagService.isTag(navDTO.getTags())) {
+        if (!navDTO.getTags().isEmpty() && !tagService.isTag(navDTO.getTags())) {
             throw new BaseException(MessageConstant.TAG_ID_ERROR);
         }
 
