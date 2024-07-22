@@ -58,4 +58,4 @@ jobs:
           file: ./docker/Dockerfile
           platforms: linux/amd64,linux/arm64/v8
           push: true
-          tags: my-navigation
+          tags: ${{ secrets.DOCKERHUB_USER }}/my-navigation:latest
