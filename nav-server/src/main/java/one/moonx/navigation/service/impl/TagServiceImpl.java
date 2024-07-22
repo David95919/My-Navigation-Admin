@@ -179,7 +179,6 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     public boolean isTag(List<Integer> ids) {
         List<Tag> tags = baseMapper.selectBatchIds(ids);
-        System.out.println(tags);
         return tags.size() == ids.size();
     }
 }

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS t_nav
 (
     id          INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     name        VARCHAR(24) UNIQUE             NOT NULL,
-    url         VARCHAR(50)                    NOT NULL,
+    url         VARCHAR(120)                   NOT NULL,
     description TEXT,
     category    INT,
     create_time DATETIME                       NOT NULL,

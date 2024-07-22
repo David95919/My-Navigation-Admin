@@ -209,12 +209,12 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
     /**
      * 是绑定标签
      *
-     * @param id 标签id
+     * @param tagId 标签id
      * @return boolean
      */
     @Override
-    public boolean isBindTag(Integer id) {
-        return navTagService.NavIsBindTag(id);
+    public boolean isBindTag(Integer tagId) {
+        return navTagService.NavIsBindTag(tagId);
     }
 
 

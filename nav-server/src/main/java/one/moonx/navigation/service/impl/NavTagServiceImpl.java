@@ -58,15 +58,16 @@ public class NavTagServiceImpl extends ServiceImpl<NavTagMapper, NavTag> impleme
         baseMapper.deleteNavTag(navId);
     }
 
+
     /**
      * nav是否绑定标签
      *
-     * @param navId 导航 ID
+     * @param tagId 标记 ID
      * @return boolean
      */
     @Override
-    public boolean NavIsBindTag(Integer navId) {
-        Long count = lambdaQuery().eq(NavTag::getNavId, navId).count();
+    public boolean NavIsBindTag(Integer tagId) {
+        Long count = lambdaQuery().eq(NavTag::getTagId, tagId).count();
         return count >= 1;
     }
 }
