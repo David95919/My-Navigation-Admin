@@ -61,4 +61,4 @@ jobs:
           file: ./docker/Dockerfile
           platforms: linux/amd64,linux/arm64/v8
           push: true
-          tags: ${{ secrets.DOCKERHUB_USER }}/my-navigation:latest
+          tags: ${{ secrets.DOCKERHUB_USER }}/my-navigation-admim:latest
