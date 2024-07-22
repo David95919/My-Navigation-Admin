@@ -88,13 +88,9 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         tagDTO.setId(null);
 
         Tag tag = tagConvert.convert(tagDTO);
-        try {
-            //保存
-            save(tag);
-        } catch (DuplicateKeyException e) {
-            //名字重复
-            throw new BaseException(MessageConstant.NAME_REPEAT);
-        }
+
+        //保存
+        save(tag);
     }
 
     /**

@@ -84,13 +84,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         //保存
         Category category = categoryConvert.convert(categoryDTO);
 
-        try {
-            //保存
-            save(category);
-        } catch (UncategorizedSQLException e) {
-            //名字重复
-            throw new BaseException(MessageConstant.NAME_REPEAT);
-        }
+        //保存
+        save(category);
     }
 
     @Override

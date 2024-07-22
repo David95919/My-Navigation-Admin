@@ -137,13 +137,7 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
 
         Nav nav = navConvert.convert(navDTO);
 
-        try {
-            //保存
-            save(nav);
-        } catch (UncategorizedSQLException e) {
-            //名字重复
-            throw new BaseException(MessageConstant.NAME_REPEAT);
-        }
+        save(nav);
 
         //保存标签
         navTagService.createNavTag(nav.getId(), navDTO.getTags());

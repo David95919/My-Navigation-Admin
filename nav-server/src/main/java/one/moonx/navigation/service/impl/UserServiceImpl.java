@@ -74,13 +74,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //密码MD5加密
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
 
-        try {
-            //保存
-            save(user);
-        } catch (UncategorizedSQLException e) {
-            //用户名重复
-            throw new BaseException(UserConstant.USER_USERNAME_REPEAT);
-        }
+        //保存
+        save(user);
     }
 
     /**
