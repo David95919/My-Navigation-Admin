@@ -23,4 +23,6 @@ public interface NavService extends IService<Nav> {
     NavVO getVOById(Integer id);
 
     ResultPage<List<NavVO>> getVOList(NavQuery query);
+
+    void deleteMultipleTags(List<Integer> ids);
 }

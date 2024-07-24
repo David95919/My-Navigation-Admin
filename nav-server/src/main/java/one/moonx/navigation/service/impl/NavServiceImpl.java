@@ -248,4 +248,17 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
 
         return ResultPage.success.msgAndRecords(MessageConstant.GET_SUCCESS, navVOList, page.getTotal());
     }
+
+    /**
+     * 删除多个标签
+     *
+     * @param ids ids
+     */
+    @Override
+    public void deleteMultipleTags(List<Integer> ids) {
+        //TODO removeBatchByIds(ids);
+        for (Integer id : ids) {
+            removeById(id);
+        }
+    }
 }

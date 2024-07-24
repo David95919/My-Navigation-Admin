@@ -3,6 +3,7 @@ package one.moonx.navigation.controller.admin;
 import one.moonx.navigation.base.Result;
 import one.moonx.navigation.base.ResultPage;
 import one.moonx.navigation.constant.MessageConstant;
+import one.moonx.navigation.pojo.dto.IdsDTO;
 import one.moonx.navigation.pojo.dto.NavDTO;
 import one.moonx.navigation.pojo.dto.NavQuery;
 import one.moonx.navigation.pojo.vo.NavVO;
@@ -74,6 +75,18 @@ public class NavController {
     @DeleteMapping("/{id}")
     public Result<String> deleteNav(@PathVariable Integer id) {
         navService.removeById(id);
+        return Result.success.msg(MessageConstant.DELETE_SUCCESS);
+    }
+
+    /**
+     * 删除多个标签
+     *
+     * @param ids ids
+     * @return {@link Result }<{@link String }>
+     */
+    @DeleteMapping("/multiple")
+    public Result<String> deleteMultipleTags(@RequestBody IdsDTO ids) {
+        navService.deleteMultipleTags(ids.getIds());
         return Result.success.msg(MessageConstant.DELETE_SUCCESS);
     }
 }
