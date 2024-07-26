@@ -2,6 +2,7 @@ package one.moonx.navigation.controller.user;
 
 import one.moonx.navigation.base.Result;
 import one.moonx.navigation.constant.MessageConstant;
+import one.moonx.navigation.pojo.dto.WeatherNowDTO;
 import one.moonx.navigation.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,5 +19,11 @@ public class WeatherController {
     public Result<String> getWeatherId(String city, String area) {
         String id = weatherService.getWeatherId(city, area);
         return Result.success.msgAndData(MessageConstant.GET_SUCCESS, id);
+    }
+
+    @GetMapping
+    public Result<WeatherNowDTO> getWeather(String weatherId) {
+        WeatherNowDTO result = weatherService.getWeather(weatherId);
+        return Result.success.msgAndData(MessageConstant.GET_SUCCESS, result);
     }
 }

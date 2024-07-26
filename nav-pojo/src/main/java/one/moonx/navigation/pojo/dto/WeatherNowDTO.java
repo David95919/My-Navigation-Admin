@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class WeatherNowDTO {
 
-    public String code;
+    public Integer code;
     /**
      * 更新时间
      */
