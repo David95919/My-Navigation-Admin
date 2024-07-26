@@ -32,3 +32,7 @@ one:
       # jwt过期时间
       adminTtl: 36000000
       adminTokenName: token
+
+    weather:
+      enable: false
+      key: null

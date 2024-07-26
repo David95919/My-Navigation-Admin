@@ -59,3 +59,6 @@ one:
       adminSecretKey: ${one.moonx.jwt.adminSecretKey}
       adminTtl: ${one.moonx.jwt.adminTtl}
       adminTokenName: ${one.moonx.jwt.adminTokenName}
+    weather:
+      enable: ${one.moonx.weather.enable}
+      key: ${one.moonx.weather.key}

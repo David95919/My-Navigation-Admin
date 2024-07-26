@@ -2,6 +2,7 @@ package one.moonx.navigation.config;
 
 import lombok.extern.slf4j.Slf4j;
 import one.moonx.navigation.interceptor.JwtTokenAdminInterceptor;
+import one.moonx.navigation.interceptor.UserWeatherInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+    @Autowired
+    private UserWeatherInterceptor userWeatherInterceptor;
 
 
     /**
@@ -27,5 +30,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/user/login");
+
+        registry.addInterceptor(userWeatherInterceptor)
+                .addPathPatterns("/user/weather/**");
     }
 }
