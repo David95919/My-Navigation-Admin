@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@RestController("adminNavController")
 @RequestMapping("/admin/nav")
 public class NavController {
     @Autowired
