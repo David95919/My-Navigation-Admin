@@ -15,7 +15,6 @@ import one.moonx.navigation.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -178,7 +177,10 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      */
     @Override
     public boolean isTag(List<Integer> ids) {
+        if (ids.isEmpty()) return true;
+
         List<Tag> tags = baseMapper.selectBatchIds(ids);
+
         return tags.size() == ids.size();
     }
 }

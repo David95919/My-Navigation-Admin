@@ -17,7 +17,6 @@ import one.moonx.navigation.service.NavService;
 import one.moonx.navigation.service.NavTagService;
 import one.moonx.navigation.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -160,6 +159,10 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
         }
 
         //检查分类存不存在
+        if (navDTO.getCategory() == null) {
+            throw new BaseException(MessageConstant.NO_BINDING_CATEGORY);
+        }
+
         if (categoryService.getById(navDTO.getCategory()) == null) {
             throw new BaseException(MessageConstant.CATEGORY_ID_ERROR);
         }
