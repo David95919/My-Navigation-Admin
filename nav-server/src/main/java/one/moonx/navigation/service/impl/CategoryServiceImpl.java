@@ -101,7 +101,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
-    @CacheEvict(cacheNames = cacheName, key = "#categoryDTO.id")
+    @CacheEvict(cacheNames = cacheName, allEntries = true)
     public void updateCategory(CategoryDTO categoryDTO) {
         //简单检查
         check(categoryDTO.getName(), categoryDTO.getId());
