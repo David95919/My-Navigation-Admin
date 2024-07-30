@@ -21,6 +21,9 @@ ENV REDIS_DATABASE="0"
 ENV SECRETKEY="yourSecretKey"
 ENV ADMINTTL="36000000"
 
+ENV WEATHER_ENABLE="false"
+ENV WEATHER_KEY=""
+
 
 CMD ["sh", "-c", "java -jar nav-server-1.0-SNAPSHOT.jar \
      --one.moonx.datasource.host=${MYSQL_HOST} \
@@ -33,4 +36,6 @@ CMD ["sh", "-c", "java -jar nav-server-1.0-SNAPSHOT.jar \
      --one.moonx.redis.database=${REDIS_DATABASE} \
      --one.moonx.jwt.adminSecretKey=${SECRETKEY} \
      --one.moonx.jwt.adminTtl=${ADMINTTL} \
+     --one.moonx.weather.enable=${WEATHER_ENABLE} \
+     --one.moonx.weather.key=${WEATHER_KEY} \
      "]
