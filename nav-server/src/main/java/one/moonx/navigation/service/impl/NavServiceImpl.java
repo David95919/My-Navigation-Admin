@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import one.moonx.navigation.base.ResultPage;
 import one.moonx.navigation.constant.MessageConstant;
 import one.moonx.navigation.constant.NavConstant;
+import one.moonx.navigation.convert.CategoryConvert;
 import one.moonx.navigation.convert.NavConvert;
+import one.moonx.navigation.convert.TagConvert;
 import one.moonx.navigation.exception.BaseException;
 import one.moonx.navigation.mapper.NavMapper;
 import one.moonx.navigation.pojo.dto.NavDTO;
@@ -28,11 +30,17 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
     @Autowired
     private NavConvert navConvert;
     @Autowired
+    private CategoryConvert categoryConvert;
+    @Autowired
+    private TagConvert tagConvert;
+
+    @Autowired
     private CategoryService categoryService;
     @Autowired
     private TagService tagService;
     @Autowired
     private NavTagService navTagService;
+
 
     /**
      * 检查
@@ -105,10 +113,10 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
         NavVO navVO = navConvert.convertVO(nav);
 
         //获取categoryVO
-        navVO.setCategory(categoryService.getVOById(nav.getCategory()));
+        navVO.setCategory(categoryConvert.convertVO(categoryService.getById(nav.getCategory())));
 
         //获取tagVO
-        navVO.setTags(tagService.getVOList(nav.getId()));
+        navVO.setTags(tagConvert.convertVO(tagService.listByNavId(nav.getId())));
 
         return navVO;
     }
@@ -243,10 +251,10 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
             Nav nav = records.get(i);
             //获取分类
             Integer categoryId = nav.getCategory();
-            navVOList.get(i).setCategory(categoryService.getVOById(categoryId));
+            navVOList.get(i).setCategory(categoryConvert.convertVO(categoryService.getById(categoryId)));
 
             //获取tags
-            navVOList.get(i).setTags(tagService.getVOList(nav.getId()));
+            navVOList.get(i).setTags(tagConvert.convertVO(tagService.listByNavId(nav.getId())));
         }
 
         return ResultPage.success.msgAndRecords(MessageConstant.GET_SUCCESS, navVOList, page.getTotal());

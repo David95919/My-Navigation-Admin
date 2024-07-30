@@ -86,31 +86,33 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      */
     @Override
     @CacheEvict(cacheNames = cacheName, allEntries = true)
-    public Category createCategory(CategoryDTO categoryDTO) {
+    public void createCategory(CategoryDTO categoryDTO) {
         //检查名字
         check(categoryDTO.getName());
+
         //清空id
         categoryDTO.setId(null);
-        //保存
+
+        //转换成entity
         Category category = categoryConvert.convert(categoryDTO);
 
         //保存
         save(category);
-
-        return category;
     }
 
     @Override
     @CacheEvict(cacheNames = cacheName, allEntries = true)
     public void updateCategory(CategoryDTO categoryDTO) {
-        //简单检查
+        //检查
         check(categoryDTO.getName(), categoryDTO.getId());
 
-        //保存
+        //转换成entity
         Category category = categoryConvert.convert(categoryDTO);
 
+        //更新
         boolean result = updateById(category);
 
+        //判断有没有保存成功
         if (!result) {
             throw new BaseException(MessageConstant.ID_ERROR);
         }
@@ -125,17 +127,20 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override
     @CacheEvict(cacheNames = cacheName, key = "#id")
     public boolean removeById(Serializable id) {
-        //判断网站是否绑定了这个分类
+        //判断分类是否绑定网站
         boolean isBindCategory = navService.isBindCategory(Integer.parseInt(id.toString()));
         if (isBindCategory) {
             throw new BaseException(MessageConstant.ALREADY_BIND_NAV);
         }
 
+        //删除
         boolean result = super.removeById(id);
 
+        //判断是否删除成功
         if (!result) {
             throw new BaseException(MessageConstant.ID_ERROR);
         }
+
         return true;
     }
 

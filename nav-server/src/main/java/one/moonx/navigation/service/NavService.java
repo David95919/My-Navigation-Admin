@@ -19,7 +19,6 @@ public interface NavService extends IService<Nav> {
 
     boolean isBindTag(Integer id);
 
-
     NavVO getVOById(Integer id);
 
     ResultPage<List<NavVO>> getVOList(NavQuery query);

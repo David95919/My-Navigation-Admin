@@ -8,7 +8,6 @@ import one.moonx.navigation.mapper.TagMapper;
 import one.moonx.navigation.pojo.dto.TagDTO;
 import one.moonx.navigation.pojo.entity.NavTag;
 import one.moonx.navigation.pojo.entity.Tag;
-import one.moonx.navigation.pojo.vo.TagVO;
 import one.moonx.navigation.service.NavService;
 import one.moonx.navigation.service.NavTagService;
 import one.moonx.navigation.service.TagService;
@@ -30,7 +29,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Autowired
     private NavTagService navTagService;
 
-    private static final String cacheNames = "TagCache";
+    private static final String cacheName = "TagCache";
 
     /**
      * 检查
@@ -59,13 +58,24 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     }
 
     /**
+     * 列表
+     *
+     * @return {@link List }<{@link Tag }>
+     */
+    @Override
+    @Cacheable(cacheNames = cacheName)
+    public List<Tag> list() {
+        return super.list();
+    }
+
+    /**
      * 按 ID 获取
      *
      * @param id id
      * @return {@link Tag }
      */
     @Override
-    @Cacheable(cacheNames = cacheNames, key = "#id")
+    @Cacheable(cacheNames = cacheName, key = "#id")
     public Tag getById(Serializable id) {
         Tag tag = super.getById(id);
         if (tag == null) {
@@ -80,12 +90,15 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @param tagDTO 标签 DTO
      */
     @Override
+    @CacheEvict(cacheNames = cacheName, allEntries = true)
     public void createTag(TagDTO tagDTO) {
         //检查
         check(tagDTO.getName());
+
         //清空id
         tagDTO.setId(null);
 
+        //转换成entity
         Tag tag = tagConvert.convert(tagDTO);
 
         //保存
@@ -98,19 +111,21 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @param tagDTO 标记 DTO
      */
     @Override
-    @CacheEvict(cacheNames = cacheNames, key = "#tagDTO.id")
+    @CacheEvict(cacheNames = cacheName, allEntries = true)
     public void updateTag(TagDTO tagDTO) {
         ///检查
         check(tagDTO.getName(), tagDTO.getId());
 
-        //判断数据库有没有
-        Tag dbTag = getById(tagDTO.getId());
-        if (dbTag == null) {
+        //转换成entity
+        Tag tag = tagConvert.convert(tagDTO);
+
+        //更新
+        boolean result = updateById(tag);
+
+        //判断有没有保存成功
+        if (!result) {
             throw new BaseException(MessageConstant.ID_ERROR);
         }
-
-        Tag tag = tagConvert.convert(tagDTO);
-        updateById(tag);
     }
 
     /**
@@ -120,40 +135,49 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @return boolean
      */
     @Override
-    @CacheEvict(cacheNames = cacheNames, key = "#id")
+    @CacheEvict(cacheNames = cacheName, key = "#id")
     public boolean removeById(Serializable id) {
-        //判断网站是否绑定了这个Tag
+        //判断标签是否绑定网站
         boolean isBindTag = navService.isBindTag(Integer.parseInt(id.toString()));
         if (isBindTag) {
             throw new BaseException(MessageConstant.ALREADY_BIND_NAV);
         }
 
+        //删除
         boolean result = super.removeById(id);
+
+        //判断是否删除成功
         if (!result) {
             throw new BaseException(MessageConstant.ID_ERROR);
         }
+
         return true;
     }
 
-
     /**
-     * 获取VoList
+     * 按NavId获取TagList
      *
      * @param navId 导航 ID
-     * @return {@link List }<{@link TagVO }>
+     * @return {@link List }<{@link Tag }>
      */
     @Override
-    public List<TagVO> getVOList(Integer navId) {
+    @Cacheable(cacheNames = cacheName + "ByNavId", key = "#navId")
+    public List<Tag> listByNavId(Integer navId) {
+        //获取nav一对多数据
         List<NavTag> list = navTagService.lambdaQuery().eq(NavTag::getNavId, navId).list();
-        ArrayList<TagVO> arrays = new ArrayList(list.size());
 
-        //为了触发缓存
-        list.forEach(item -> {
-            TagVO tagVO = tagConvert.convertVO(this.getById(item.getTagId()));
-            arrays.add(tagVO);
-        });
+        //没有绑定标签
+        if (list.isEmpty()) return new ArrayList<>();
 
-        return arrays;
+        //转换成tagIds
+        List<Integer> tagIds = list.stream()
+                .map(NavTag::getTagId)
+                .toList();
+
+        //in 查询多个符合的
+        List<Tag> tags = lambdaQuery().in(Tag::getId, tagIds).list();
+
+        return tags;
     }
 
     /**
@@ -162,6 +186,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @param ids ids
      */
     @Override
+    @CacheEvict(cacheNames = cacheName, allEntries = true)
     public void deleteMultipleTags(List<Integer> ids) {
         //TODO removeBatchByIds(ids);
         for (Integer id : ids) {
@@ -170,7 +195,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     }
 
     /**
-     * isTag
+     * 检查标签存不存在
      *
      * @param ids ids
      * @return boolean
