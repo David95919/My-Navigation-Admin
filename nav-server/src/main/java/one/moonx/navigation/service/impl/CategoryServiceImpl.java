@@ -7,13 +7,11 @@ import one.moonx.navigation.exception.BaseException;
 import one.moonx.navigation.mapper.CategoryMapper;
 import one.moonx.navigation.pojo.dto.CategoryDTO;
 import one.moonx.navigation.pojo.entity.Category;
-import one.moonx.navigation.pojo.vo.CategoryVO;
 import one.moonx.navigation.service.CategoryService;
 import one.moonx.navigation.service.NavService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -26,7 +24,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Autowired
     private NavService navService;
 
-    private static final String cacheNames = "CategoryCache";
+    private static final String cacheName = "CategoryCache";
 
     /**
      * 检查
@@ -55,13 +53,24 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     /**
+     * 列表
+     *
+     * @return {@link List }<{@link Category }>
+     */
+    @Override
+    @Cacheable(cacheNames = cacheName)
+    public List<Category> list() {
+        return super.list();
+    }
+
+    /**
      * 按 ID 获取
      *
      * @param id id
      * @return {@link Category }
      */
     @Override
-    @Cacheable(cacheNames = cacheNames, key = "#id")
+    @Cacheable(cacheNames = cacheName, key = "#id")
     public Category getById(Serializable id) {
         Category category = CategoryService.super.getById(id);
         if (category == null) {
@@ -76,7 +85,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @param categoryDTO 类别 DTO
      */
     @Override
-    public void createCategory(CategoryDTO categoryDTO) {
+    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    public Category createCategory(CategoryDTO categoryDTO) {
         //检查名字
         check(categoryDTO.getName());
         //清空id
@@ -86,23 +96,24 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
         //保存
         save(category);
+
+        return category;
     }
 
     @Override
-    @CacheEvict(cacheNames = cacheNames, key = "#categoryDTO.id")
+    @CacheEvict(cacheNames = cacheName, key = "#categoryDTO.id")
     public void updateCategory(CategoryDTO categoryDTO) {
         //简单检查
         check(categoryDTO.getName(), categoryDTO.getId());
 
-        //检查数据库有没有数据
-        Category dbCategory = getById(categoryDTO.getId());
-        if (dbCategory == null) {
-            throw new BaseException(MessageConstant.ID_ERROR);
-        }
-
         //保存
         Category category = categoryConvert.convert(categoryDTO);
-        updateById(category);
+
+        boolean result = updateById(category);
+
+        if (!result) {
+            throw new BaseException(MessageConstant.ID_ERROR);
+        }
     }
 
     /**
@@ -112,7 +123,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return boolean
      */
     @Override
-    @CacheEvict(cacheNames = cacheNames, key = "#id")
+    @CacheEvict(cacheNames = cacheName, key = "#id")
     public boolean removeById(Serializable id) {
         //判断网站是否绑定了这个分类
         boolean isBindCategory = navService.isBindCategory(Integer.parseInt(id.toString()));
@@ -129,22 +140,12 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     /**
-     * 获取Vo按id
-     *
-     * @param id id
-     * @return {@link CategoryVO }
-     */
-    @Override
-    public CategoryVO getVOById(Integer id) {
-        return categoryConvert.convertVO(getById(id));
-    }
-
-    /**
      * 删除多个标签
      *
      * @param ids ids
      */
     @Override
+    @CacheEvict(cacheNames = cacheName, allEntries = true)
     public void deleteMultipleTags(List<Integer> ids) {
         //TODO removeBatchByIds(ids);
         for (Integer id : ids) {
