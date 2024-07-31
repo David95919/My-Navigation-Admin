@@ -175,9 +175,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
                 .toList();
 
         //in 查询多个符合的
-        List<Tag> tags = lambdaQuery().in(Tag::getId, tagIds).list();
-
-        return tags;
+        return lambdaQuery().in(Tag::getId, tagIds).list();
     }
 
     /**

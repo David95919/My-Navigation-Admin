@@ -45,3 +45,23 @@ CREATE TABLE IF NOT EXISTS t_nav_tag
     tag_id INT                            NOT NULL
 ) charset utf8
   collate utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS t_search_category
+(
+    id          INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name        VARCHAR(24) UNIQUE             NOT NULL,
+    create_time DATETIME                       NOT NULL,
+    update_time DATETIME
+) charset utf8
+  collate utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS t_search
+(
+    id          INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name        VARCHAR(24) UNIQUE             NOT NULL,
+    url         VARCHAR(120)                   NOT NULL,
+    category_id INT                            NOT NULL,
+    create_time DATETIME                       NOT NULL,
+    update_time DATETIME
+) charset utf8
+  collate utf8_general_ci;
