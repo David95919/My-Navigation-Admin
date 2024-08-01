@@ -23,6 +23,13 @@ public class ResultPage<T> implements Serializable {
     private Long total;
     private T records;
 
+    public static <T> ResultPage<T> error(String msg) {
+        ResultPage result = new ResultPage();
+        result.msg = msg;
+        result.code = 0;
+        return result;
+    }
+
     public static class success {
         public static <T> ResultPage<T> records(T object, Long total) {
             ResultPage<T> result = new ResultPage<T>();
@@ -39,14 +46,6 @@ public class ResultPage<T> implements Serializable {
             return result;
         }
 
-    }
-
-
-    public static <T> ResultPage<T> error(String msg) {
-        ResultPage result = new ResultPage();
-        result.msg = msg;
-        result.code = 0;
-        return result;
     }
 
 }

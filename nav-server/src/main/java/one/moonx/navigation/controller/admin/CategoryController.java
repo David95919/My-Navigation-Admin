@@ -27,8 +27,9 @@ public class CategoryController {
      */
     @GetMapping
     public Result<List<CategoryVO>> getCategory() {
-        List<CategoryVO> categoryVOS = categoryConvert.convertVO(categoryService.list());
-        return Result.success.msgAndData(MessageConstant.GET_SUCCESS, categoryVOS);
+        List<CategoryVO> categoryVOList = categoryConvert.convertVO(categoryService.list());
+
+        return Result.success.msgAndData(MessageConstant.GET_SUCCESS, categoryVOList);
     }
 
     /**

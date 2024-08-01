@@ -22,14 +22,13 @@ import java.util.List;
 
 @Service
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
+    private static final String cacheName = "TagCache";
     @Autowired
     private TagConvert tagConvert;
     @Autowired
     private NavService navService;
     @Autowired
     private NavTagService navTagService;
-
-    private static final String cacheName = "TagCache";
 
     /**
      * 检查

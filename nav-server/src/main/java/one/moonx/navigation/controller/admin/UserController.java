@@ -29,7 +29,9 @@ public class UserController {
      */
     @GetMapping
     public Result<List<UserVO>> getUser() {
-        return Result.success.msgAndData(UserConstant.USER_GET_SUCCESS, userConvert.convertVO(userService.list()));
+        List<UserVO> userVOList = userConvert.convertVO(userService.list());
+
+        return Result.success.msgAndData(UserConstant.USER_GET_SUCCESS, userVOList);
     }
 
     /**

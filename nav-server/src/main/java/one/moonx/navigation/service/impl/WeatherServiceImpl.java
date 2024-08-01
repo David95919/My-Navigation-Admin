@@ -16,12 +16,11 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 public class WeatherServiceImpl implements WeatherService {
+    private static final String cacheNames = "Weather";
     @Autowired
     private WeatherProperties weatherProperties;
     @Autowired
     private RestTemplate restTemplate;
-
-    private static final String cacheNames = "Weather";
 
     @Override
     @Cacheable(cacheNames = cacheNames + "Id", key = "#city+'_'+#area")

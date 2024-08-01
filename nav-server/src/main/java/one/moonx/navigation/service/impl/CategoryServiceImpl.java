@@ -19,12 +19,11 @@ import java.util.List;
 
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
+    private static final String cacheName = "CategoryCache";
     @Autowired
     private CategoryConvert categoryConvert;
     @Autowired
     private NavService navService;
-
-    private static final String cacheName = "CategoryCache";
 
     /**
      * 检查

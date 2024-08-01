@@ -27,8 +27,9 @@ public class TagController {
      */
     @GetMapping
     public Result<List<TagVO>> getTag() {
-        List<TagVO> tagVOS = tagConvert.convertVO(tagService.list());
-        return Result.success.msgAndData(MessageConstant.GET_SUCCESS, tagVOS);
+        List<TagVO> tagVOList = tagConvert.convertVO(tagService.list());
+
+        return Result.success.msgAndData(MessageConstant.GET_SUCCESS, tagVOList);
     }
 
     /**

@@ -13,7 +13,6 @@ import one.moonx.navigation.properties.JwtProperties;
 import one.moonx.navigation.service.UserService;
 import one.moonx.navigation.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 

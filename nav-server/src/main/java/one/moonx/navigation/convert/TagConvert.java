@@ -11,7 +11,7 @@ import java.util.List;
 public interface TagConvert {
     TagVO convertVO(Tag tag);
 
-    List<TagVO> convertVO(List<Tag> tags);
+    List<TagVO> convertVO(List<Tag> tagList);
 
     Tag convert(TagVO tagVO);
 
