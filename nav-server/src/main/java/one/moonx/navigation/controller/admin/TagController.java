@@ -35,12 +35,13 @@ public class TagController {
     /**
      * 按 ID 获取标签
      *
-     * @param id 同上
+     * @param id id
      * @return {@link Result }<{@link TagVO }>
      */
     @GetMapping("/{id}")
     public Result<TagVO> getTagById(@PathVariable Integer id) {
         TagVO tagVO = tagConvert.convertVO(tagService.getById(id));
+
         return Result.success.msgAndData(MessageConstant.GET_SUCCESS, tagVO);
     }
 

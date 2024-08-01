@@ -89,9 +89,7 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
         Nav nav = super.getById(id);
 
         //如果是空返回id错误
-        if (nav == null) {
-            throw new BaseException(MessageConstant.ID_ERROR);
-        }
+        if (nav == null) throw new BaseException(MessageConstant.ID_ERROR);
 
         return nav;
     }

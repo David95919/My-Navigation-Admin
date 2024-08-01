@@ -77,9 +77,9 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Cacheable(cacheNames = cacheName, key = "#id")
     public Tag getById(Serializable id) {
         Tag tag = super.getById(id);
-        if (tag == null) {
-            throw new BaseException(MessageConstant.ID_ERROR);
-        }
+
+        if (tag == null) throw new BaseException(MessageConstant.ID_ERROR);
+
         return tag;
     }
 

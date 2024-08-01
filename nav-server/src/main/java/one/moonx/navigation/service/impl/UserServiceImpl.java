@@ -51,9 +51,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getById(Serializable id) {
         User user = super.getById(id);
-        if (user == null) {
-            throw new BaseException(MessageConstant.ID_ERROR);
-        }
+        if (user == null) throw new BaseException(MessageConstant.USER_ID_ERROR);
+
         return user;
     }
 

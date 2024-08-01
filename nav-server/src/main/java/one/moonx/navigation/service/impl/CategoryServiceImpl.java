@@ -72,9 +72,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Cacheable(cacheNames = cacheName, key = "#id")
     public Category getById(Serializable id) {
         Category category = CategoryService.super.getById(id);
-        if (category == null) {
-            throw new BaseException(MessageConstant.CATEGORY_ID_ERROR);
-        }
+
+        if (category == null) throw new BaseException(MessageConstant.CATEGORY_ID_ERROR);
+
         return category;
     }
 
