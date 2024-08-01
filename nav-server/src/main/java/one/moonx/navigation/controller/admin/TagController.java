@@ -54,6 +54,7 @@ public class TagController {
     @PostMapping
     public Result<String> createTag(@RequestBody TagDTO tagDTO) {
         tagService.createTag(tagDTO);
+
         return Result.success.msg(MessageConstant.ADD_SUCCESS);
     }
 

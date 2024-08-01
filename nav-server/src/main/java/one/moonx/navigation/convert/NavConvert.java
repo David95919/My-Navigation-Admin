@@ -6,21 +6,17 @@ import one.moonx.navigation.pojo.vo.CategoryVO;
 import one.moonx.navigation.pojo.vo.NavVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface NavConvert {
-    @Mappings({
-            @Mapping(target = "category", qualifiedByName = "getCategory")
-    })
+
+    @Mapping(target = "category", qualifiedByName = "getCategory")
     List<NavVO> convertVO(List<Nav> navList);
 
-    @Mappings({
-            @Mapping(target = "category", qualifiedByName = "getCategory")
-    })
+    @Mapping(target = "category", qualifiedByName = "getCategory")
     NavVO convertVO(Nav navs);
 
     Nav convert(NavDTO navDTO);

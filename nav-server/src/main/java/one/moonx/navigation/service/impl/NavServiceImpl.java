@@ -55,7 +55,7 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
                 throw new BaseException(NavConstant.NAME_UNLAWFUL);
             }
         }
-        //TODO 需要更好的判断url
+
         if (url != null) {
             if (!url.matches("^(http|https)://.*$")) {
                 throw new BaseException(NavConstant.URL_UNLAWFUL);

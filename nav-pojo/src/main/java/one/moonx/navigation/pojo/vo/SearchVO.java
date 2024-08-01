@@ -10,5 +10,5 @@ public class SearchVO {
 
     private String url;
 
-    private Integer categoryId;
+    private SearchCategoryVO searchCategory;
 }

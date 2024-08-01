@@ -3,13 +3,11 @@ package one.moonx.navigation.controller.admin;
 import one.moonx.navigation.base.Result;
 import one.moonx.navigation.constant.MessageConstant;
 import one.moonx.navigation.convert.SearchCategoryConvert;
+import one.moonx.navigation.pojo.dto.SearchCategoryDTO;
 import one.moonx.navigation.pojo.vo.SearchCategoryVO;
 import one.moonx.navigation.service.SearchCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,5 +42,18 @@ public class SearchCategoryController {
         SearchCategoryVO searchCategoryVO = searchCategoryConvert.convertVO(searchCategoryService.getById(id));
 
         return Result.success.msgAndData(MessageConstant.GET_SUCCESS, searchCategoryVO);
+    }
+
+    /**
+     * 创建搜索类别
+     *
+     * @param searchCategoryDTO 搜索类别 DTO
+     * @return {@link Result }<{@link String }>
+     */
+    @PostMapping
+    public Result<String> createSearchCategory(@RequestBody SearchCategoryDTO searchCategoryDTO) {
+        searchCategoryService.createSearchCategory(searchCategoryDTO);
+
+        return Result.success.msg(MessageConstant.ADD_SUCCESS);
     }
 }
