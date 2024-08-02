@@ -11,6 +11,7 @@ import one.moonx.navigation.service.SearchCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -18,10 +19,10 @@ import java.util.List;
 
 @Service
 public class SearchCategoryServiceImpl extends ServiceImpl<SearchCategoryMapper, SearchCategory> implements SearchCategoryService {
+    private static final String cacheName = "SearchCategoryCache";
+    private static final String searchCacheName = "SearchCache";
     @Autowired
     private SearchCategoryConvert searchCategoryConvert;
-
-    private static final String cacheName = "SearchCategoryCache";
 
     /**
      * 检查
@@ -55,7 +56,7 @@ public class SearchCategoryServiceImpl extends ServiceImpl<SearchCategoryMapper,
      * @return {@link List }<{@link SearchCategory }>
      */
     @Override
-    @Cacheable(cacheNames = cacheName)
+    @Cacheable(cacheNames = cacheName, key = "'list'")
     public List<SearchCategory> list() {
         return super.list();
     }
@@ -82,7 +83,7 @@ public class SearchCategoryServiceImpl extends ServiceImpl<SearchCategoryMapper,
      * @param searchCategoryDTO 搜索类别 DTO
      */
     @Override
-    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    @CacheEvict(cacheNames = cacheName, key = "'list'")
     public void createSearchCategory(SearchCategoryDTO searchCategoryDTO) {
         check(searchCategoryDTO.getName());
 
@@ -99,7 +100,14 @@ public class SearchCategoryServiceImpl extends ServiceImpl<SearchCategoryMapper,
      * @param searchCategoryDTO 搜索类别 DTO
      */
     @Override
-    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    @Caching(evict = {
+            //清理搜索类别的List
+            @CacheEvict(cacheNames = cacheName, key = "'list'"),
+            //清理搜索类别的Id
+            @CacheEvict(cacheNames = cacheName, key = "#searchCategoryDTO.id"),
+            //清理搜索全部
+            @CacheEvict(cacheNames = searchCacheName, allEntries = true)
+    })
     public void updateSearchCategory(SearchCategoryDTO searchCategoryDTO) {
         check(searchCategoryDTO.getName(), searchCategoryDTO.getId());
 

@@ -18,6 +18,7 @@ import one.moonx.navigation.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -25,14 +26,13 @@ import java.util.List;
 
 @Service
 public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> implements SearchService {
+    private static final String cacheName = "SearchCache";
     @Autowired
     private SearchConvert searchConvert;
     @Autowired
     private SearchCategoryService searchCategoryService;
     @Autowired
     private SearchCategoryConvert searchCategoryConvert;
-
-    private static final String cacheName = "SearchCache";
 
     /**
      * 检查
@@ -110,7 +110,7 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
      * @return {@link List }<{@link SearchVO }>
      */
     @Override
-    @Cacheable(cacheNames = cacheName)
+    @Cacheable(cacheNames = cacheName, key = "'list'")
     public List<SearchVO> getVOList(SearchQuery query) {
         List<Search> searchList = lambdaQuery()
                 .eq(query.getSearchCategoryId() != null, Search::getCategoryId, query.getSearchCategoryId())
@@ -169,7 +169,7 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
      * @param searchDTO 搜索 DTO
      */
     @Override
-    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    @CacheEvict(cacheNames = cacheName, key = "'list'")
     public void createSearch(SearchDTO searchDTO) {
         check(searchDTO.getName(), searchDTO.getCategoryId(), searchDTO.getUrl());
 
@@ -186,7 +186,10 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
      * @param searchDTO 搜索 DTO
      */
     @Override
-    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(cacheNames = cacheName, key = "'list'"),
+            @CacheEvict(cacheNames = cacheName, key = "#searchDTO.id")
+    })
     public void updateSearch(SearchDTO searchDTO) {
         check(searchDTO.getName(), searchDTO.getId(), searchDTO.getCategoryId(), searchDTO.getUrl());
 
