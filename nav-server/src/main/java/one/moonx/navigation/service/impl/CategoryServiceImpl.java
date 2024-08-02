@@ -12,6 +12,7 @@ import one.moonx.navigation.service.NavService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -57,7 +58,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return {@link List }<{@link Category }>
      */
     @Override
-    @Cacheable(cacheNames = cacheName)
+    @Cacheable(cacheNames = cacheName, key = "'list'")
     public List<Category> list() {
         return super.list();
     }
@@ -84,7 +85,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @param categoryDTO 类别 DTO
      */
     @Override
-    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    @CacheEvict(cacheNames = cacheName, key = "'list'")
     public void createCategory(CategoryDTO categoryDTO) {
         //检查名字
         check(categoryDTO.getName());
@@ -99,8 +100,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         save(category);
     }
 
+    /**
+     * 更新类别
+     *
+     * @param categoryDTO 类别 DTO
+     */
     @Override
-    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(cacheNames = cacheName, key = "'list'"),
+            @CacheEvict(cacheNames = cacheName, key = "#categoryDTO.id")
+    })
     public void updateCategory(CategoryDTO categoryDTO) {
         //检查
         check(categoryDTO.getName(), categoryDTO.getId());
@@ -124,7 +133,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return boolean
      */
     @Override
-    @CacheEvict(cacheNames = cacheName, key = "#id")
+    @Caching(evict = {
+            @CacheEvict(cacheNames = cacheName, key = "'list'"),
+            @CacheEvict(cacheNames = cacheName, key = "#id")
+    })
     public boolean removeById(Serializable id) {
         //判断分类是否绑定网站
         boolean isBindCategory = navService.isBindCategory(Integer.parseInt(id.toString()));
