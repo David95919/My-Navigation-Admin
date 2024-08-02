@@ -14,4 +14,6 @@ public interface SearchService extends IService<Search> {
     List<SearchVO> getVOList(SearchQuery query);
 
     SearchVO getVOById(String id);
+
+    void updateSearch(SearchDTO searchDTO);
 }

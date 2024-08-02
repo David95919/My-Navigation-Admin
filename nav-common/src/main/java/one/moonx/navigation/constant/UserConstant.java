@@ -3,7 +3,6 @@ package one.moonx.navigation.constant;
 public class UserConstant {
     public static final String UNKNOWN_ERROR = "未知错误";
 
-
     //User
     public static final String USER_LOGIN_SUCCESS = "用户登录成功";
     public static final String USER_CREATE_SUCCESS = "用户创建成功";

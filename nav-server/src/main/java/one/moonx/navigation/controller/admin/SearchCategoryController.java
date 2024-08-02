@@ -56,4 +56,17 @@ public class SearchCategoryController {
 
         return Result.success.msg(MessageConstant.ADD_SUCCESS);
     }
+
+    /**
+     * 更新搜索类别
+     *
+     * @param searchCategoryDTO 搜索类别 DTO
+     * @return {@link Result }<{@link String }>
+     */
+    @PutMapping
+    public Result<String> updateSearchCategory(@RequestBody SearchCategoryDTO searchCategoryDTO) {
+        searchCategoryService.updateSearchCategory(searchCategoryDTO);
+
+        return Result.success.msg(MessageConstant.UPDATE_SUCCESS);
+    }
 }

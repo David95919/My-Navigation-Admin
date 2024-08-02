@@ -6,4 +6,6 @@ import one.moonx.navigation.pojo.entity.SearchCategory;
 
 public interface SearchCategoryService extends IService<SearchCategory> {
     void createSearchCategory(SearchCategoryDTO searchCategoryDTO);
+
+    void updateSearchCategory(SearchCategoryDTO searchCategoryDTO);
 }

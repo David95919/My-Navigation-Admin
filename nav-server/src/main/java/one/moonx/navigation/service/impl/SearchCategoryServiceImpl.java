@@ -92,4 +92,21 @@ public class SearchCategoryServiceImpl extends ServiceImpl<SearchCategoryMapper,
 
         save(searchCategory);
     }
+
+    /**
+     * 更新搜索类别
+     *
+     * @param searchCategoryDTO 搜索类别 DTO
+     */
+    @Override
+    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    public void updateSearchCategory(SearchCategoryDTO searchCategoryDTO) {
+        check(searchCategoryDTO.getName(), searchCategoryDTO.getId());
+
+        SearchCategory searchCategory = searchCategoryConvert.convert(searchCategoryDTO);
+
+        boolean result = updateById(searchCategory);
+
+        if (!result) throw new BaseException(MessageConstant.UPDATE_FAIL);
+    }
 }

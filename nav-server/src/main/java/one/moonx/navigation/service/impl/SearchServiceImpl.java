@@ -60,15 +60,46 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
         }
     }
 
+    /**
+     * 检查
+     *
+     * @param name             名字
+     * @param searchCategoryId 搜索类别 ID
+     * @param url              网址
+     */
     private void check(String name, Integer searchCategoryId, String url) {
         check(name);
+
+        //搜索类别id是否为空
         if (searchCategoryId == null) {
             throw new BaseException(MessageConstant.SEARCH_CATEGORY_ID_ERROR);
         }
+        //判断搜索类别是否查找
+        if (searchCategoryService.getById(searchCategoryId) == null) {
+            throw new BaseException(MessageConstant.SEARCH_CATEGORY_ID_ERROR);
+        }
+
+        //检查url
         if (url != null) {
             if (!url.matches("^(http|https)://.*$")) {
                 throw new BaseException(NavConstant.URL_UNLAWFUL);
             }
+        }
+    }
+
+    /**
+     * 检查
+     *
+     * @param name             名字
+     * @param id               id
+     * @param searchCategoryId 搜索类别 ID
+     * @param url              网址
+     */
+    private void check(String name, Integer id, Integer searchCategoryId, String url) {
+        check(name, searchCategoryId, url);
+
+        if (searchCategoryId == null) {
+            throw new BaseException(MessageConstant.SEARCH_ID_ERROR);
         }
     }
 
@@ -144,13 +175,25 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
 
         searchDTO.setId(null);
 
-        //检查分类id
-        if (searchCategoryService.getById(searchDTO.getCategoryId()) == null) {
-            throw new BaseException(MessageConstant.SEARCH_CATEGORY_ID_ERROR);
-        }
-
         Search search = searchConvert.convert(searchDTO);
 
         save(search);
+    }
+
+    /**
+     * 更新搜索
+     *
+     * @param searchDTO 搜索 DTO
+     */
+    @Override
+    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    public void updateSearch(SearchDTO searchDTO) {
+        check(searchDTO.getName(), searchDTO.getId(), searchDTO.getCategoryId(), searchDTO.getUrl());
+
+        Search search = searchConvert.convert(searchDTO);
+
+        boolean result = updateById(search);
+
+        if (!result) throw new BaseException(MessageConstant.UPDATE_FAIL);
     }
 }
