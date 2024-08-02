@@ -7,3 +7,4 @@
 # 优化处
 
 1. nav搜索支持tag
+2. 去除Transactional

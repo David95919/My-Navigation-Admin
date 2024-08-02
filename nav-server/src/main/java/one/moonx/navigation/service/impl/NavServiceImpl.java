@@ -181,7 +181,8 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
 
         //更新nav
         updateById(navConvert.convert(navDTO));
-        //更新tag
+
+        //更新navTag
         navTagService.updateNavTag(navDTO.getId(), navDTO.getTags());
     }
 

@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface NavTagMapper extends BaseMapper<NavTag> {
-    @Delete("delete from t_nav_tag where nav_id = #{navId}")
+    @Delete("DELETE FROM t_nav_tag WHERE nav_id = #{navId}")
     void deleteNavTag(Integer navId);
 }

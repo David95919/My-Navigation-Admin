@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import one.moonx.navigation.mapper.NavTagMapper;
 import one.moonx.navigation.pojo.entity.NavTag;
 import one.moonx.navigation.service.NavTagService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ public class NavTagServiceImpl extends ServiceImpl<NavTagMapper, NavTag> impleme
      */
     @Override
     @Transactional
+    @CacheEvict(cacheNames = "TagCacheByNavId", key = "#navId")
     public void updateNavTag(Integer navId, List<Integer> tags) {
         //删除之前的navTag
         baseMapper.deleteNavTag(navId);
@@ -53,6 +55,7 @@ public class NavTagServiceImpl extends ServiceImpl<NavTagMapper, NavTag> impleme
      * @param navId 导航 ID
      */
     @Override
+    @CacheEvict(cacheNames = "TagCacheByNavId", key = "#navId")
     public void deleteNavTag(Integer navId) {
         //删除
         baseMapper.deleteNavTag(navId);

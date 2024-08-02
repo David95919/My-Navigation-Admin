@@ -14,6 +14,7 @@ import one.moonx.navigation.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -62,7 +63,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @return {@link List }<{@link Tag }>
      */
     @Override
-    @Cacheable(cacheNames = cacheName)
+    @Cacheable(cacheNames = cacheName, key = "'list'")
     public List<Tag> list() {
         return super.list();
     }
@@ -89,7 +90,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @param tagDTO 标签 DTO
      */
     @Override
-    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    @CacheEvict(cacheNames = cacheName, key = "'list'")
     public void createTag(TagDTO tagDTO) {
         //检查
         check(tagDTO.getName());
@@ -110,7 +111,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @param tagDTO 标记 DTO
      */
     @Override
-    @CacheEvict(cacheNames = cacheName, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(cacheNames = cacheName, key = "'list'"),
+            @CacheEvict(cacheNames = cacheName, key = "#tagDTO.id"),
+            @CacheEvict(cacheNames = cacheName + "ByNavId", allEntries = true)
+    })
     public void updateTag(TagDTO tagDTO) {
         ///检查
         check(tagDTO.getName(), tagDTO.getId());
@@ -134,7 +139,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @return boolean
      */
     @Override
-    @CacheEvict(cacheNames = cacheName, key = "#id")
+    @Caching(evict = {
+            @CacheEvict(cacheNames = cacheName, key = "'list'"),
+            @CacheEvict(cacheNames = cacheName, key = "#id"),
+            @CacheEvict(cacheNames = cacheName + "ByNavId", allEntries = true)
+    })
     public boolean removeById(Serializable id) {
         //判断标签是否绑定网站
         boolean isBindTag = navService.isBindTag(Integer.parseInt(id.toString()));
