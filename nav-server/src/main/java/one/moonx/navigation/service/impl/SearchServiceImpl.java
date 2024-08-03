@@ -97,7 +97,7 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
      * @return {@link List }<{@link SearchVO }>
      */
     @Override
-    @Cacheable(cacheNames = cacheName, key = "'list'")
+    @Cacheable(cacheNames = cacheName + "BySearchCategoryId", key = "#query.searchCategoryId")
     public List<SearchVO> getVOList(SearchQuery query) {
         List<Search> searchList = lambdaQuery()
                 .eq(query.getSearchCategoryId() != null, Search::getCategoryId, query.getSearchCategoryId())
@@ -156,7 +156,7 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
      * @param searchDTO 搜索 DTO
      */
     @Override
-    @CacheEvict(cacheNames = cacheName, key = "'list'")
+    @CacheEvict(cacheNames = cacheName + "BySearchCategoryId", allEntries = true)
     public void createSearch(SearchDTO searchDTO) {
         check(searchDTO.getName(), searchDTO.getCategoryId(), searchDTO.getUrl());
 
@@ -174,7 +174,7 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
      */
     @Override
     @Caching(evict = {
-            @CacheEvict(cacheNames = cacheName, key = "'list'"),
+            @CacheEvict(cacheNames = cacheName + "BySearchCategoryId", allEntries = true),
             @CacheEvict(cacheNames = cacheName, key = "#searchDTO.id")
     })
     public void updateSearch(SearchDTO searchDTO) {
@@ -194,7 +194,7 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
      */
     @Override
     @Caching(evict = {
-            @CacheEvict(cacheNames = cacheName, key = "'list'"),
+            @CacheEvict(cacheNames = cacheName + "BySearchCategoryId", allEntries = true),
             @CacheEvict(cacheNames = cacheName, key = "#id")
     })
     public void deleteSearch(Integer id) {

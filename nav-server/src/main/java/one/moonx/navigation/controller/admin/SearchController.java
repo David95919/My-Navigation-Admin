@@ -2,7 +2,6 @@ package one.moonx.navigation.controller.admin;
 
 import one.moonx.navigation.base.Result;
 import one.moonx.navigation.constant.MessageConstant;
-import one.moonx.navigation.convert.SearchConvert;
 import one.moonx.navigation.pojo.dto.SearchDTO;
 import one.moonx.navigation.pojo.dto.SearchQuery;
 import one.moonx.navigation.pojo.vo.SearchVO;
@@ -17,8 +16,6 @@ import java.util.List;
 public class SearchController {
     @Autowired
     private SearchService searchService;
-    @Autowired
-    private SearchConvert searchConvert;
 
     /**
      * 获取搜索
