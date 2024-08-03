@@ -69,4 +69,17 @@ public class SearchCategoryController {
 
         return Result.success.msg(MessageConstant.UPDATE_SUCCESS);
     }
+
+    /**
+     * 删除搜索类别
+     *
+     * @param id id
+     * @return {@link Result }<{@link String }>
+     */
+    @DeleteMapping("/{id}")
+    public Result<String> deleteSearchCategory(@PathVariable Integer id) {
+        searchCategoryService.deleteSearchCategory(id);
+
+        return Result.success.msg(MessageConstant.DELETE_SUCCESS);
+    }
 }

@@ -8,4 +8,6 @@ public interface SearchCategoryService extends IService<SearchCategory> {
     void createSearchCategory(SearchCategoryDTO searchCategoryDTO);
 
     void updateSearchCategory(SearchCategoryDTO searchCategoryDTO);
+
+    void deleteSearchCategory(Integer id);
 }

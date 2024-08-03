@@ -8,6 +8,7 @@ import one.moonx.navigation.mapper.SearchCategoryMapper;
 import one.moonx.navigation.pojo.dto.SearchCategoryDTO;
 import one.moonx.navigation.pojo.entity.SearchCategory;
 import one.moonx.navigation.service.SearchCategoryService;
+import one.moonx.navigation.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,10 +20,13 @@ import java.util.List;
 
 @Service
 public class SearchCategoryServiceImpl extends ServiceImpl<SearchCategoryMapper, SearchCategory> implements SearchCategoryService {
-    private static final String cacheName = "SearchCategoryCache";
-    private static final String searchCacheName = "SearchCache";
     @Autowired
     private SearchCategoryConvert searchCategoryConvert;
+    @Autowired
+    private SearchService searchService;
+
+    private static final String cacheName = "SearchCategoryCache";
+    private static final String searchCacheName = "SearchCache";
 
     /**
      * 检查
@@ -116,5 +120,28 @@ public class SearchCategoryServiceImpl extends ServiceImpl<SearchCategoryMapper,
         boolean result = updateById(searchCategory);
 
         if (!result) throw new BaseException(MessageConstant.UPDATE_FAIL);
+    }
+
+    /**
+     * 删除搜索类别
+     *
+     * @param id id
+     */
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = cacheName, key = "'list'"),
+            @CacheEvict(cacheNames = cacheName, key = "#id"),
+    })
+    public void deleteSearchCategory(Integer id) {
+        //检查是否绑定Search
+        if (searchService.isBindSearchCategory(id)) {
+            throw new BaseException(MessageConstant.SEARCH_BIND_SEARCH_CATEGORY);
+        }
+
+        boolean result = removeById(id);
+
+        if (!result) {
+            throw new BaseException(MessageConstant.ID_ERROR);
+        }
     }
 }

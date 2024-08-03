@@ -70,4 +70,17 @@ public class SearchController {
 
         return Result.success.msg(MessageConstant.UPDATE_SUCCESS);
     }
+
+    /**
+     * 删除搜索
+     *
+     * @param id id
+     * @return {@link Result }<{@link String }>
+     */
+    @DeleteMapping("/{id}")
+    public Result<String> deleteSearch(@PathVariable Integer id){
+        searchService.deleteSearch(id);
+
+        return Result.success.msg(MessageConstant.DELETE_SUCCESS);
+    }
 }

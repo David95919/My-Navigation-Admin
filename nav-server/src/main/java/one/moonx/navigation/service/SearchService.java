@@ -16,4 +16,8 @@ public interface SearchService extends IService<Search> {
     SearchVO getVOById(String id);
 
     void updateSearch(SearchDTO searchDTO);
+
+    void deleteSearch(Integer id);
+
+    boolean isBindSearchCategory(Integer searchCategoryId);
 }

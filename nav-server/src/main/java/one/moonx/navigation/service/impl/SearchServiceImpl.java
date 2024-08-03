@@ -50,19 +50,6 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
     /**
      * 检查
      *
-     * @param name 名字
-     * @param id   id
-     */
-    private void check(String name, Integer id) {
-        check(name);
-        if (id == null) {
-            throw new BaseException(MessageConstant.ID_ERROR);
-        }
-    }
-
-    /**
-     * 检查
-     *
      * @param name             名字
      * @param searchCategoryId 搜索类别 ID
      * @param url              网址
@@ -98,7 +85,7 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
     private void check(String name, Integer id, Integer searchCategoryId, String url) {
         check(name, searchCategoryId, url);
 
-        if (searchCategoryId == null) {
+        if (id == null) {
             throw new BaseException(MessageConstant.SEARCH_ID_ERROR);
         }
     }
@@ -198,5 +185,36 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
         boolean result = updateById(search);
 
         if (!result) throw new BaseException(MessageConstant.UPDATE_FAIL);
+    }
+
+    /**
+     * 删除搜索
+     *
+     * @param id id
+     */
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = cacheName, key = "'list'"),
+            @CacheEvict(cacheNames = cacheName, key = "#id")
+    })
+    public void deleteSearch(Integer id) {
+        boolean result = removeById(id);
+
+        if (!result) {
+            throw new BaseException(MessageConstant.ID_ERROR);
+        }
+    }
+
+    /**
+     * 是绑定搜索类别
+     *
+     * @param searchCategoryId 搜索类别 ID
+     * @return boolean
+     */
+    @Override
+    public boolean isBindSearchCategory(Integer searchCategoryId) {
+        Long count = lambdaQuery().eq(Search::getCategoryId, searchCategoryId).count();
+
+        return count >= 1;
     }
 }
