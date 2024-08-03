@@ -236,6 +236,8 @@ public class NavServiceImpl extends ServiceImpl<NavMapper, Nav> implements NavSe
      */
     @Override
     public ResultPage<List<NavVO>> getVOList(NavQuery query) {
+        if (query.getSize() == null || query.getCurrent() == null) throw new BaseException(MessageConstant.QUERY_ERROR);
+
         // TODO AddTag Query
         Page<Nav> page = lambdaQuery()
                 .like(query.getName() != null, Nav::getName, query.getName())
