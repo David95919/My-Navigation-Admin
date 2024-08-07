@@ -97,7 +97,7 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
      * @return {@link List }<{@link SearchVO }>
      */
     @Override
-    @Cacheable(cacheNames = cacheName + "BySearchCategoryId", key = "#query.searchCategoryId")
+    @Cacheable(cacheNames = cacheName + "BySearchCategoryId", key = "#query.searchCategoryId != null ? #query.searchCategoryId : 'list'")
     public List<SearchVO> getVOList(SearchQuery query) {
         List<Search> searchList = lambdaQuery()
                 .eq(query.getSearchCategoryId() != null, Search::getCategoryId, query.getSearchCategoryId())
